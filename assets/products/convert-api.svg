@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#f7f7f8"/>
+  <rect width="800" height="600" fill="url(#g)"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fe5a01" stop-opacity=".14"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="130" y="150" width="220" height="280" rx="24" fill="#fff" stroke="rgba(8,9,12,.12)" stroke-width="2"/>
+  <rect x="450" y="150" width="220" height="280" rx="24" fill="#fff" stroke="rgba(8,9,12,.12)" stroke-width="2"/>
+  <path d="M350 290 H450" stroke="#fe5a01" stroke-width="4" stroke-linecap="round"/>
+  <path d="M418 262 L450 290 L418 318" stroke="#fe5a01" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="170" y="210" width="140" height="12" rx="6" fill="rgba(8,9,12,.08)"/>
+  <rect x="170" y="240" width="110" height="12" rx="6" fill="rgba(8,9,12,.06)"/>
+  <rect x="170" y="270" width="125" height="12" rx="6" fill="rgba(8,9,12,.06)"/>
+  <circle cx="560" cy="250" r="42" fill="rgba(254,90,1,.12)"/>
+  <text x="560" y="262" text-anchor="middle" fill="#fe5a01" font-family="Inter,Segoe UI,sans-serif" font-size="34" font-weight="800">PDF</text>
+  <text x="400" y="500" text-anchor="middle" fill="#17181c" font-family="Inter,Segoe UI,sans-serif" font-size="42" font-weight="800" letter-spacing="-1">Convert API</text>
+  <text x="400" y="540" text-anchor="middle" fill="#6f737d" font-family="Inter,Segoe UI,sans-serif" font-size="24" font-weight="500">File conversion for your product</text>
+</svg>

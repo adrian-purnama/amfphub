@@ -1,0 +1,3817 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title> AMFPHUB   Technology & AI Implementation</title>
+  <meta name="description" content=" AMFPHUB helps students, developers, and small to mid businesses implement technology and AI with n8n, SapAi LLM API, and Convert API." />
+  <meta name="theme-color" content="#fe5a01" />
+  <link rel="icon" href="./assets/logo.jpeg" />
+  <style>
+    :root {
+      --orange: #fe5a01;
+      --orange-2: #ff7a18;
+      --orange-3: #ffb000;
+      --black: #08090c;
+      --ink: #17181c;
+      --muted: #6f737d;
+      --line: rgba(12, 13, 18, 0.12);
+      --soft: #f7f7f8;
+      --white: #ffffff;
+      --shadow: 0 22px 70px rgba(7, 8, 12, 0.13);
+      --glow: 0 0 60px rgba(254, 90, 1, .35);
+      --radius-xl: 34px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --max: 1180px;
+      --fw-display: 800;
+      --fw-heading: 700;
+      --fw-subhead: 600;
+      --fw-body: 450;
+      --fw-medium: 550;
+      --fw-emphasis: 650;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: #fff;
+      overflow-x: hidden;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 8%, rgba(254, 90, 1, .13), transparent 28rem),
+        radial-gradient(circle at 92% 18%, rgba(8, 9, 12, .08), transparent 26rem),
+        linear-gradient(180deg, #fff 0%, #f8f8f9 58%, #fff 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    ::selection {
+      background: var(--orange);
+      color: white;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .16;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='.22'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+      z-index: 0;
+    }
+
+    .spotlight {
+      position: fixed;
+      width: 520px;
+      height: 520px;
+      left: 0;
+      top: 0;
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(254,90,1,.17), transparent 62%);
+      opacity: 0;
+      transition: opacity .25s ease;
+      mix-blend-mode: multiply;
+    }
+
+    body:hover .spotlight { opacity: 1; }
+
+    .site {
+      position: relative;
+      z-index: 1;
+      overflow-x: clip;
+      max-width: 100%;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, .74);
+      border-bottom: 1px solid rgba(10, 10, 12, .08);
+    }
+
+    .nav-inner {
+      height: 78px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 1000;
+      letter-spacing: -.04em;
+      font-size: 1.25rem;
+    }
+
+    .brand img {
+      width: 46px;
+      height: 46px;
+      object-fit: contain;
+      border-radius: 14px;
+      box-shadow: 0 12px 32px rgba(254, 90, 1, .18);
+      transition: transform .25s ease;
+    }
+
+    .brand:hover img { transform: rotate(-6deg) scale(1.04); }
+
+    .brand span span { color: var(--orange); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      color: rgba(23, 24, 28, .72);
+      font-weight: var(--fw-medium);
+      font-size: .93rem;
+    }
+
+    .nav-links a {
+      transition: color .2s ease;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 100%;
+      bottom: -8px;
+      height: 2px;
+      border-radius: 999px;
+      background: var(--orange);
+      transition: right .25s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--orange);
+    }
+
+    .nav-links a:hover::after {
+      right: 0;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Simple text language switcher + mobile drawer */
+    .lang-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-weight: 1000;
+      letter-spacing: -.02em;
+      color: rgba(23, 24, 28, .42);
+      user-select: none;
+    }
+
+    .lang-choice {
+      color: rgba(23, 24, 28, .42);
+      cursor: pointer;
+      transition: color .2s ease, opacity .2s ease, transform .2s ease;
+      line-height: 1;
+    }
+
+    .lang-choice:hover {
+      color: var(--orange);
+      transform: translateY(-1px);
+    }
+
+    html[data-lang="en"] .lang-choice[data-set-lang="en"],
+    html[data-lang="id"] .lang-choice[data-set-lang="id"] {
+      color: var(--orange);
+      opacity: 1;
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 5px;
+    }
+
+    .drawer-toggle,
+    .drawer-close {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.78);
+      color: var(--black);
+      border-radius: 999px;
+      min-height: 40px;
+      padding: 0 14px;
+      font-weight: 1000;
+      cursor: pointer;
+      display: none;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .drawer-toggle:hover,
+    .drawer-close:hover {
+      transform: translateY(-1px);
+      border-color: rgba(254,90,1,.28);
+    }
+
+    .drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 89;
+      background: rgba(8,9,12,.34);
+      backdrop-filter: blur(8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .24s ease;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      z-index: 90;
+      width: min(390px, calc(100vw - 28px));
+      height: 100vh;
+      padding: 18px;
+      background: rgba(255,255,255,.90);
+      backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(8,9,12,.10);
+      box-shadow: -28px 0 80px rgba(8,9,12,.18);
+      transform: translateX(105%);
+      transition: transform .32s cubic-bezier(.2,.8,.2,1);
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      pointer-events: none;
+    }
+
+    body.drawer-open {
+      overflow: hidden;
+    }
+
+    body.drawer-open .drawer-backdrop {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.drawer-open .mobile-drawer {
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    .drawer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .drawer-close {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drawer-links {
+      display: grid;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .drawer-links a {
+      border: 1px solid rgba(8,9,12,.08);
+      background: rgba(255,255,255,.62);
+      border-radius: 20px;
+      padding: 18px;
+      font-size: 1.25rem;
+      line-height: 1;
+      font-weight: 1000;
+      letter-spacing: -.045em;
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+
+    .drawer-links a:hover {
+      transform: translateX(-4px);
+      border-color: rgba(254,90,1,.30);
+      background: rgba(254,90,1,.06);
+    }
+
+    .drawer-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--line);
+      padding-top: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      font-weight: 850;
+    }
+
+    .lang-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 10px 30px rgba(8,9,12,.06);
+    }
+
+    .lang-toggle button {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 1000;
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    html[data-lang="en"] .lang-toggle button[data-set-lang="en"],
+    html[data-lang="id"] .lang-toggle button[data-set-lang="id"] {
+      color: white;
+      background: var(--black);
+      box-shadow: 0 8px 22px rgba(8,9,12,.18);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      font-weight: 1000;
+      letter-spacing: -.01em;
+      transition: box-shadow .2s ease, border-color .2s ease, background .2s ease, opacity .2s ease;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      color: white;
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      box-shadow: 0 10px 24px rgba(254, 90, 1, .22);
+    }
+
+    .button.primary:hover {
+      box-shadow: 0 12px 28px rgba(254, 90, 1, .26);
+    }
+
+    .button.dark {
+      color: white;
+      background: var(--black);
+      box-shadow: 0 18px 40px rgba(8, 9, 12, .18);
+    }
+
+    .button.ghost {
+      background: rgba(255, 255, 255, .62);
+      border-color: var(--line);
+      color: var(--ink);
+    }
+
+    .button.ghost:hover {
+      background: #fff;
+      border-color: rgba(254, 90, 1, .24);
+    }
+
+    .hero {
+      padding: 84px 0 68px;
+      min-height: calc(100vh - 78px);
+      display: grid;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(2px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .blob.one {
+      width: 240px;
+      height: 240px;
+      background: rgba(254,90,1,.18);
+      left: 6%;
+      top: 14%;
+    }
+
+    .blob.two {
+      width: 190px;
+      height: 190px;
+      background: rgba(8,9,12,.09);
+      right: 10%;
+      bottom: 8%;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, .95fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid rgba(254, 90, 1, .22);
+      background: rgba(254, 90, 1, .08);
+      color: #9d3500;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-weight: var(--fw-subhead);
+      font-size: .86rem;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 99px;
+      background: var(--orange);
+      box-shadow: 0 0 0 8px rgba(254, 90, 1, .14);
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 7.2rem);
+      line-height: .86;
+      letter-spacing: -.085em;
+      margin-bottom: 22px;
+      max-width: 900px;
+    }
+
+    .split-word {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+    }
+
+    .split-word > span {
+      display: inline-block;
+      transform: translateY(110%);
+    }
+
+    h1 .accent, .accent { color: var(--orange); }
+
+    .lead {
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      color: rgba(23, 24, 28, .68);
+      max-width: 700px;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 34px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      max-width: 700px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.64);
+      border-radius: 20px;
+      padding: 16px;
+      backdrop-filter: blur(14px);
+      transition: transform .25s ease, border-color .25s ease;
+    }
+
+    .stat:hover {
+      transform: translateY(-5px);
+      border-color: rgba(254,90,1,.28);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.45rem;
+      letter-spacing: -.05em;
+      color: var(--black);
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-weight: 750;
+      font-size: .9rem;
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: var(--radius-xl);
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(10, 10, 12, .09);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      overflow: hidden;
+      min-height: 580px;
+      isolation: isolate;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      width: 330px;
+      height: 330px;
+      background: radial-gradient(circle, rgba(254,90,1,.35), transparent 64%);
+      top: -90px;
+      right: -90px;
+      z-index: -1;
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      background: radial-gradient(circle, rgba(8,9,12,.14), transparent 65%);
+      bottom: -110px;
+      left: -80px;
+      z-index: -1;
+    }
+
+    .orbit {
+      position: absolute;
+      inset: 34px;
+      border: 1px dashed rgba(8, 9, 12, .13);
+      border-radius: 999px;
+      animation: spin 25s linear infinite;
+      pointer-events: none;
+    }
+
+    .orbit::before,
+    .orbit::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: var(--orange);
+      box-shadow: var(--glow);
+    }
+
+    .orbit::before { top: 20%; left: 4%; }
+    .orbit::after { bottom: 12%; right: 10%; background: var(--black); box-shadow: 0 0 50px rgba(8,9,12,.25); }
+
+    .logo-stage {
+      min-height: 220px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 22px;
+      position: relative;
+      transform: translateZ(42px);
+    }
+
+    .logo-stage img {
+      width: min(320px, 78%);
+      border-radius: 28px;
+      mix-blend-mode: multiply;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .floating-chip {
+      position: absolute;
+      border-radius: 999px;
+      background: rgba(255,255,255,.84);
+      border: 1px solid rgba(10,10,12,.1);
+      padding: 9px 12px;
+      font-size: .82rem;
+      font-weight: 1000;
+      box-shadow: 0 14px 34px rgba(8,9,12,.1);
+      white-space: nowrap;
+    }
+
+    .floating-chip.c1 { top: 28px; left: 20px; }
+    .floating-chip.c2 { top: 96px; right: 10px; color: var(--orange); }
+    .floating-chip.c3 { bottom: 34px; left: 20px; }
+
+    .terminal {
+      border-radius: 24px;
+      overflow: hidden;
+      background: #0b0c10;
+      color: #f7f7f8;
+      box-shadow: 0 22px 60px rgba(8,9,12,.26);
+      transform: translateZ(28px);
+      position: relative;
+    }
+
+    .terminal::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.07), transparent);
+      transform: translateX(-120%);
+      animation: shine 5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .terminal-head {
+      display: flex;
+      gap: 7px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,.09);
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.24);
+    }
+
+    .dot:nth-child(1) { background: #ff5f57; }
+    .dot:nth-child(2) { background: #ffbd2e; }
+    .dot:nth-child(3) { background: #28c840; }
+
+    .terminal-body {
+      padding: 20px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: .95rem;
+      min-height: 210px;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      opacity: 0;
+      transform: translateY(8px);
+      animation: lineIn .55s ease forwards;
+    }
+
+    .terminal-line:nth-child(2) { animation-delay: .35s; }
+    .terminal-line:nth-child(3) { animation-delay: .7s; }
+    .terminal-line:nth-child(4) { animation-delay: 1.05s; }
+    .terminal-line:nth-child(5) { animation-delay: 1.4s; }
+
+    .prompt { color: var(--orange-2); font-weight: 1000; }
+    .ok { color: #76f6a0; }
+
+
+    /* Upgraded hero section */
+    .hero {
+      padding: 96px 0 74px;
+      min-height: calc(100vh - 78px);
+      background:
+        radial-gradient(circle at 18% 26%, rgba(254,90,1,.18), transparent 27rem),
+        radial-gradient(circle at 82% 20%, rgba(8,9,12,.10), transparent 27rem);
+    }
+
+    .hero-grid-upgraded {
+      grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr);
+      gap: clamp(28px, 5vw, 68px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-bg-word {
+      position: absolute;
+      inset: auto 0 -3vw 0;
+      text-align: center;
+      font-size: clamp(5rem, 17vw, 18rem);
+      line-height: .72;
+      font-weight: 1000;
+      letter-spacing: -.14em;
+      color: rgba(8,9,12,.045);
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 0;
+      transform: translateX(-1.4vw);
+    }
+
+    .hero-gridlines {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(8,9,12,.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,9,12,.05) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at 50% 35%, black, transparent 78%);
+      pointer-events: none;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-title {
+      max-width: 920px;
+      text-wrap: balance;
+    }
+
+    .hero-title .split-word {
+      margin-right: .08em;
+    }
+
+    .hero-proof {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 790px;
+      margin-top: 4px;
+    }
+
+    .proof-chip {
+      position: relative;
+      overflow: hidden;
+      min-height: 96px;
+      border: 1px solid rgba(8,9,12,.10);
+      background: rgba(255,255,255,.66);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      padding: 15px;
+      box-shadow: 0 14px 38px rgba(8,9,12,.06);
+    }
+
+    .proof-chip::after {
+      content: "";
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      right: -44px;
+      bottom: -48px;
+      border-radius: 999px;
+      background: rgba(254,90,1,.10);
+    }
+
+    .proof-chip strong {
+      display: block;
+      color: var(--orange);
+      font-size: .86rem;
+      font-weight: 1000;
+      margin-bottom: 18px;
+    }
+
+    .proof-chip span {
+      display: block;
+      font-weight: 850;
+      letter-spacing: -.025em;
+      color: rgba(23,24,28,.78);
+      line-height: 1.25;
+      position: relative;
+      z-index: 1;
+    }
+
+    .command-center {
+      min-height: 620px;
+      padding: 22px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.88), rgba(255,255,255,.60)),
+        radial-gradient(circle at 20% 10%, rgba(254,90,1,.20), transparent 20rem);
+      border: 1px solid rgba(8,9,12,.10);
+      box-shadow:
+        0 34px 100px rgba(8,9,12,.16),
+        inset 0 1px 0 rgba(255,255,255,.8);
+    }
+
+    .command-center::before {
+      width: 420px;
+      height: 420px;
+      top: -170px;
+      right: -130px;
+      background: radial-gradient(circle, rgba(254,90,1,.30), transparent 65%);
+      animation: pulse 5s ease-in-out infinite;
+    }
+
+    .command-center::after {
+      width: 360px;
+      height: 360px;
+      left: -160px;
+      bottom: -160px;
+      background: radial-gradient(circle, rgba(8,9,12,.12), transparent 64%);
+    }
+
+    .panel-glow {
+      position: absolute;
+      inset: 18px;
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,.62);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .command-top,
+    .workflow-map,
+    .command-bottom {
+      position: relative;
+      z-index: 2;
+    }
+
+    .command-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid rgba(8,9,12,.09);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(18px);
+    }
+
+    .command-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .command-brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      background: white;
+    }
+
+    .command-brand strong {
+      display: block;
+      font-size: .98rem;
+      letter-spacing: -.03em;
+    }
+
+    .command-brand span {
+      display: block;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+
+    .live-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      background: var(--black);
+      color: white;
+      padding: 9px 12px;
+      font-size: .8rem;
+      font-weight: 1000;
+      white-space: nowrap;
+    }
+
+    .live-pill span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #76f6a0;
+      box-shadow: 0 0 0 7px rgba(118,246,160,.15);
+      animation: pulseDot 1.6s ease infinite;
+    }
+
+    .workflow-map {
+      height: 390px;
+      margin: 22px 0;
+      border-radius: 30px;
+      overflow: hidden;
+      border: 1px solid rgba(8,9,12,.08);
+      background:
+        radial-gradient(circle at 50% 50%, rgba(254,90,1,.12), transparent 15rem),
+        linear-gradient(180deg, rgba(255,255,255,.66), rgba(255,255,255,.35));
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+    }
+
+    .workflow-lines {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .flow-line {
+      fill: none;
+      stroke: url(#lineGradient);
+      stroke-width: 3;
+      stroke-linecap: round;
+      stroke-dasharray: 10 12;
+      animation: dashFlow 7s linear infinite;
+    }
+
+    .l2 { animation-duration: 8s; }
+    .l3 { animation-duration: 6.5s; }
+    .l4 { animation-duration: 7.4s; }
+
+    .workflow-core,
+    .workflow-node {
+      position: absolute;
+      z-index: 2;
+      border: 1px solid rgba(8,9,12,.12);
+      background: rgba(255,255,255,.80);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 48px rgba(8,9,12,.10);
+    }
+
+    .workflow-core {
+      left: 50%;
+      top: 50%;
+      width: 148px;
+      height: 148px;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: white;
+      background:
+        radial-gradient(circle at 30% 24%, rgba(255,255,255,.28), transparent 38%),
+        linear-gradient(135deg, var(--orange), #f04400);
+      font-weight: 1000;
+      letter-spacing: -.05em;
+      line-height: 1.02;
+      padding: 20px;
+      box-shadow: 0 22px 60px rgba(254,90,1,.30), var(--glow);
+    }
+
+    .workflow-core::before,
+    .workflow-core::after {
+      content: "";
+      position: absolute;
+      inset: -14px;
+      border-radius: inherit;
+      border: 1px solid rgba(254,90,1,.26);
+      animation: ringPulse 2.6s ease-out infinite;
+    }
+
+    .workflow-core::after {
+      inset: -28px;
+      animation-delay: .35s;
+    }
+
+    .workflow-node {
+      min-width: 128px;
+      border-radius: 22px;
+      padding: 14px 16px;
+    }
+
+    .workflow-node b {
+      display: block;
+      font-size: 1.06rem;
+      letter-spacing: -.04em;
+    }
+
+    .workflow-node span {
+      color: var(--muted);
+      font-weight: 800;
+      font-size: .84rem;
+    }
+
+    .node-a { left: 7%; top: 9%; }
+    .node-b { right: 7%; top: 10%; }
+    .node-c { left: 7%; bottom: 10%; }
+    .node-d { right: 6%; bottom: 10%; background: rgba(8,9,12,.92); color: white; }
+    .node-d span { color: rgba(255,255,255,.70); }
+
+    .command-bottom {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mini-metric {
+      border: 1px solid rgba(8,9,12,.09);
+      background: rgba(255,255,255,.62);
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      padding: 14px;
+    }
+
+    .mini-metric span {
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .mini-metric strong {
+      display: block;
+      font-size: 1.35rem;
+      line-height: 1;
+      letter-spacing: -.06em;
+      margin-top: 8px;
+    }
+
+    .command-center .floating-chip {
+      z-index: 3;
+    }
+
+    .command-center .c1 { top: 92px; left: -18px; }
+    .command-center .c2 { top: 178px; right: -22px; }
+    .command-center .c3 { bottom: 130px; left: -26px; }
+
+    @keyframes dashFlow {
+      to { stroke-dashoffset: -220; }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(.72); opacity: .7; }
+    }
+
+    @keyframes ringPulse {
+      0% { opacity: .65; transform: scale(.92); }
+      100% { opacity: 0; transform: scale(1.28); }
+    }
+
+    /* Minimal hero */
+    .hero.hero-minimal {
+      padding: 0;
+      min-height: calc(100vh - 78px);
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #fff 0%, #fbfbfb 100%);
+    }
+
+    .hero.hero-minimal .blob,
+    .hero.hero-minimal .hero-gridlines,
+    .hero.hero-minimal .hero-bg-word {
+      display: none;
+    }
+
+    .hero-minimal-inner {
+      width: 100%;
+      max-width: none;
+      min-height: calc(100vh - 78px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 0;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-tapes {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .hero-tape {
+      position: absolute;
+      left: -18%;
+      width: 136%;
+      padding: 15px 0;
+      overflow: hidden;
+      box-shadow: 0 16px 44px rgba(8, 9, 12, .1);
+    }
+
+    .hero-tape-one {
+      top: 36%;
+      transform: rotate(-7deg);
+      background: linear-gradient(90deg, #08090c 0%, #17181c 48%, #08090c 100%);
+      border-block: 1px solid rgba(254, 90, 1, .42);
+    }
+
+    .hero-tape-two {
+      top: 58%;
+      transform: rotate(5deg);
+      background: linear-gradient(90deg, #e04f00 0%, var(--orange) 42%, var(--orange-2) 100%);
+      border-block: 1px solid rgba(255, 255, 255, .24);
+      box-shadow: 0 16px 44px rgba(254, 90, 1, .22);
+    }
+
+    .hero-tape-two .hero-tape-item {
+      color: rgba(255, 255, 255, .96);
+    }
+
+    .hero-tape-two .hero-tape-item .tape-mark {
+      color: rgba(255, 255, 255, .5);
+    }
+
+    .hero-tape-track {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      width: max-content;
+      padding-inline: 12px;
+      animation: heroTapeSlide 24s linear infinite;
+    }
+
+    .hero-tape-track-reverse {
+      animation-direction: reverse;
+      animation-duration: 28s;
+    }
+
+    .hero-tape-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .82rem;
+      font-weight: var(--fw-subhead);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: rgba(255, 255, 255, .92);
+    }
+
+    .hero-tape-item .tape-mark {
+      color: var(--orange);
+      font-size: .62rem;
+    }
+
+    @keyframes heroTapeSlide {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    @media (min-width: 981px) {
+      .hero-tape {
+        left: -14%;
+        width: 128%;
+        padding: 22px 0;
+        box-shadow: 0 20px 56px rgba(8, 9, 12, .12);
+      }
+
+      .hero-tape-two {
+        box-shadow: 0 20px 56px rgba(254, 90, 1, .24);
+      }
+
+      .hero-tape-one {
+        top: 22%;
+        transform: rotate(-4.5deg);
+      }
+
+      .hero-tape-two {
+        top: 74%;
+        transform: rotate(3.5deg);
+      }
+
+      .hero-tape-track {
+        gap: 32px;
+        padding-inline: 20px;
+        animation-duration: 34s;
+      }
+
+      .hero-tape-track-reverse {
+        animation-duration: 40s;
+      }
+
+      .hero-tape-item {
+        font-size: 1rem;
+        letter-spacing: .16em;
+      }
+
+      .hero-tape-item .tape-mark {
+        font-size: .7rem;
+      }
+
+      .hero-minimal-inner {
+        padding: 72px 0;
+      }
+
+      .hero-word-wrap {
+        padding-inline: 24px;
+      }
+    }
+
+    @media (min-width: 1280px) {
+      .hero-tape-one { top: 20%; }
+      .hero-tape-two { top: 76%; }
+
+      .hero-tape-item {
+        font-size: 1.05rem;
+      }
+    }
+
+    .minimal-title {
+      margin: 0;
+      font-size: clamp(4.5rem, 16vw, 14rem);
+      line-height: 1;
+      letter-spacing: -.03em;
+      font-weight: var(--fw-display);
+      color: var(--black);
+      text-transform: uppercase;
+    }
+
+    .hero-minimal .hero-title {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      max-width: none;
+      width: 100%;
+      margin-inline: auto;
+      margin-bottom: 0;
+      text-align: center;
+      letter-spacing: -.03em;
+    }
+
+    .hero-minimal .hero-title .split-word {
+      margin-right: 0;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .minimal-title .accent {
+      color: var(--orange);
+    }
+
+    .minimal-title .split-word {
+      margin-right: 0;
+    }
+
+
+    /* Fix: keep the minimal hero visible even if GSAP CDN does not load */
+    .hero.hero-minimal .split-word {
+      overflow: visible;
+    }
+
+    .hero.hero-minimal .split-word > span {
+      transform: none;
+    }
+
+    /* Subtle ReactBits-inspired hero flare */
+    .hero-minimal-bg {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .hero-dot-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(8, 9, 12, .07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8, 9, 12, .07) 1px, transparent 1px);
+      background-size: 54px 54px;
+      opacity: .64;
+      mask-image: radial-gradient(ellipse at center, black 0%, rgba(0,0,0,.78) 34%, transparent 72%);
+      animation: gridDrift 18s linear infinite;
+    }
+
+    .hero-dotted-line {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 100%;
+      max-width: 100%;
+      height: 360px;
+      transform: translate(-50%, -50%);
+      opacity: .78;
+      filter: drop-shadow(0 18px 38px rgba(254, 90, 1, .12));
+    }
+
+    .hero-dotted-line path {
+      fill: none;
+      stroke: rgba(254, 90, 1, .78);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-dasharray: 3 17;
+      animation: dottedFlow 20s linear infinite;
+    }
+
+    .hero-dotted-line .line-soft {
+      stroke: rgba(8, 9, 12, .20);
+      stroke-width: 1.4;
+      stroke-dasharray: 1 18;
+      animation-duration: 26s;
+    }
+
+    .hero-dotted-line .line-ghost {
+      stroke: rgba(254, 90, 1, .28);
+      stroke-width: 1.2;
+      stroke-dasharray: 2 22;
+      animation-duration: 31s;
+      animation-direction: reverse;
+    }
+
+    .hero-dotted-line .line-hair {
+      stroke: rgba(8, 9, 12, .13);
+      stroke-width: 1;
+      stroke-dasharray: 1 24;
+      animation-duration: 36s;
+    }
+
+    .hero-dotted-line .line-accent-soft {
+      stroke: rgba(254, 90, 1, .22);
+      stroke-width: 1.2;
+      stroke-dasharray: 4 28;
+      animation-duration: 42s;
+      animation-direction: reverse;
+    }
+
+    .hero-word-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: 900px;
+      margin-inline: auto;
+    }
+
+    .hero-quote {
+      position: relative;
+      right: auto;
+      bottom: auto;
+      transform: none;
+      margin-top: clamp(16px, 2.5vw, 28px);
+      width: min(520px, 92vw);
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: none;
+      backdrop-filter: none;
+      box-shadow: none;
+      color: var(--muted);
+      font-size: clamp(.95rem, 1.4vw, 1.12rem);
+      font-weight: 500;
+      letter-spacing: -.01em;
+      line-height: 1.45;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .hero-quote::before {
+      display: none;
+    }
+
+    .hero-soft-glow {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: min(760px, 72vw);
+      height: 180px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, rgba(254, 90, 1, .16), transparent 68%);
+      filter: blur(18px);
+      opacity: .78;
+    }
+
+    .hero-corner-dot {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--orange);
+      box-shadow: 0 0 0 9px rgba(254, 90, 1, .10), 0 0 46px rgba(254, 90, 1, .35);
+      opacity: .75;
+    }
+
+    .hero-corner-dot.one { left: 16%; top: 22%; }
+    .hero-corner-dot.two { right: 15%; top: 36%; background: var(--black); box-shadow: 0 0 0 9px rgba(8,9,12,.08), 0 0 46px rgba(8,9,12,.18); }
+
+    .hero-minimal-inner {
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes dottedFlow {
+      to { stroke-dashoffset: -220; }
+    }
+
+    @keyframes gridDrift {
+      from { background-position: 0 0; }
+      to { background-position: 108px 108px; }
+    }
+
+    .marquee-wrap {
+      border-block: 1px solid var(--line);
+      background: rgba(255,255,255,.58);
+      overflow: hidden;
+      padding: 18px 0;
+    }
+
+    .marquee {
+      display: flex;
+      width: max-content;
+      gap: 22px;
+      will-change: transform;
+    }
+
+    .marquee span {
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      line-height: 1;
+      font-weight: var(--fw-heading);
+      letter-spacing: -.055em;
+      color: rgba(8,9,12,.78);
+      white-space: nowrap;
+    }
+
+    .marquee .orange { color: var(--orange); }
+
+    section { padding: 86px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 36px;
+    }
+
+    .kicker {
+      color: var(--orange);
+      font-weight: var(--fw-subhead);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: .78rem;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: clamp(2.2rem, 4.7vw, 4.5rem);
+      line-height: .94;
+      letter-spacing: -.07em;
+      margin-bottom: 0;
+      max-width: 790px;
+      font-weight: var(--fw-heading);
+    }
+
+    .section-copy {
+      color: var(--muted);
+      max-width: 420px;
+      font-weight: var(--fw-body);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      background: rgba(255,255,255,.80);
+      box-shadow: 0 18px 50px rgba(8,9,12,.06);
+      overflow: hidden;
+      min-height: 280px;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .card:hover {
+      box-shadow: 0 26px 74px rgba(8,9,12,.12);
+      border-color: rgba(254,90,1,.30);
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: auto -60px -80px auto;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: rgba(254,90,1,.1);
+      transition: transform .25s ease;
+    }
+
+    .card:hover::after { transform: scale(1.45); }
+
+    /* What we sell cards: normal flat default, lift only on hover */
+    #services .card {
+      transform: translateY(0);
+      will-change: auto;
+    }
+
+    #services .card:hover {
+      transform: translateY(-7px);
+    }
+
+    .catalogue-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .catalogue-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .catalogue-search {
+      flex: 1 1 280px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 52px;
+      padding: 0 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      box-shadow: 0 12px 32px rgba(8,9,12,.04);
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .catalogue-search:focus-within {
+      border-color: rgba(254, 90, 1, .45);
+      box-shadow: 0 0 0 4px rgba(254,90,1,.1);
+    }
+
+    .catalogue-search svg {
+      flex: 0 0 auto;
+      color: var(--muted);
+    }
+
+    .catalogue-search input {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      font: inherit;
+      font-weight: var(--fw-body);
+      color: var(--ink);
+      outline: none;
+    }
+
+    .catalogue-search input::placeholder {
+      color: rgba(111, 115, 125, .85);
+    }
+
+    .catalogue-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,.72);
+      color: rgba(23, 24, 28, .72);
+      font: inherit;
+      font-size: .88rem;
+      font-weight: var(--fw-subhead);
+      cursor: pointer;
+      transition: border-color .2s ease, background .2s ease, color .2s ease, transform .2s ease;
+    }
+
+    .filter-chip:hover {
+      border-color: rgba(254,90,1,.28);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .filter-chip.is-active {
+      color: white;
+      background: var(--black);
+      border-color: var(--black);
+      box-shadow: 0 10px 24px rgba(8,9,12,.14);
+    }
+
+    .catalogue-empty {
+      display: none;
+      margin: 0 0 24px;
+      padding: 28px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      color: var(--muted);
+      font-weight: var(--fw-body);
+      background: rgba(255,255,255,.58);
+    }
+
+    .catalogue-empty.is-visible {
+      display: block;
+    }
+
+    .product-card.is-hidden {
+      display: none;
+    }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 18px 50px rgba(8,9,12,.06);
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 26px 74px rgba(8,9,12,.12);
+      border-color: rgba(254,90,1,.30);
+    }
+
+    .product-card-media {
+      display: block;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(254,90,1,.12), rgba(8,9,12,.06));
+    }
+
+    .product-card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .35s ease;
+    }
+
+    .product-card:hover .product-card-media img {
+      transform: scale(1.04);
+    }
+
+    .product-card-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 10px;
+      padding: 22px;
+    }
+
+    .product-card-body h3 {
+      font-size: 1.35rem;
+      letter-spacing: -.04em;
+      margin: 0;
+      font-weight: var(--fw-subhead);
+    }
+
+    .product-card-body p {
+      color: var(--muted);
+      font-weight: var(--fw-body);
+      margin: 0;
+      flex: 1;
+      font-size: .95rem;
+      line-height: 1.5;
+    }
+
+    .product-card-body .button {
+      align-self: flex-start;
+      min-height: 42px;
+      padding: 0 16px;
+      font-size: .9rem;
+      font-weight: var(--fw-subhead);
+    }
+
+    .card-topline {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      top: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+      opacity: .85;
+    }
+
+    .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: var(--black);
+      color: white;
+      font-weight: 1000;
+      margin-bottom: 20px;
+      box-shadow: 0 14px 32px rgba(8,9,12,.18);
+      transform: translateZ(24px);
+    }
+
+    .icon.orange {
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      box-shadow: 0 14px 32px rgba(254,90,1,.24);
+    }
+
+    .card h3 {
+      font-size: 1.5rem;
+      letter-spacing: -.045em;
+      margin-bottom: 10px;
+      transform: translateZ(18px);
+      font-weight: var(--fw-subhead);
+    }
+
+    .card p {
+      color: var(--muted);
+      margin-bottom: 0;
+      font-weight: var(--fw-body);
+      transform: translateZ(12px);
+    }
+
+    .pill-list {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .pill {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.68);
+      font-size: .84rem;
+      font-weight: var(--fw-subhead);
+      color: rgba(23,24,28,.74);
+    }
+
+    .band {
+      border-radius: var(--radius-xl);
+      background:
+        radial-gradient(circle at 16% 20%, rgba(254,90,1,.32), transparent 28rem),
+        linear-gradient(135deg, #0b0c10, #17181c);
+      color: white;
+      padding: clamp(32px, 6vw, 66px);
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 30px 90px rgba(8,9,12,.22);
+    }
+
+    .band::after {
+      content: "";
+      position: absolute;
+      width: 520px;
+      height: 520px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 999px;
+      right: -180px;
+      top: -220px;
+    }
+
+    .band-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .band h2 { color: white; }
+    .band p { color: rgba(255,255,255,.72); font-weight: var(--fw-body); }
+
+    .check-list { display: grid; gap: 14px; }
+
+    .check {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      padding: 14px;
+      backdrop-filter: blur(14px);
+    }
+
+    .check-label { font-weight: var(--fw-subhead); color: white; }
+    .check span { color: rgba(255,255,255,.68); font-weight: var(--fw-body); }
+
+    .check::before {
+      content: "✓";
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: var(--orange);
+      flex: 0 0 auto;
+      font-weight: 1000;
+      color: white;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      counter-reset: step;
+    }
+
+    .step {
+      counter-increment: step;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      background: rgba(255,255,255,.74);
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+
+    .step:hover {
+      transform: translateY(-6px);
+      border-color: rgba(254,90,1,.28);
+    }
+
+    .step::before {
+      content: counter(step, decimal-leading-zero);
+      display: inline-flex;
+      color: var(--orange);
+      font-weight: 1000;
+      letter-spacing: -.04em;
+      margin-bottom: 48px;
+      font-size: 1.15rem;
+    }
+
+    .step::after {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      right: -54px;
+      top: -54px;
+      background: rgba(254,90,1,.09);
+    }
+
+    .step h3 { margin-bottom: 10px; letter-spacing: -.035em; font-weight: var(--fw-subhead); }
+    .step p { color: var(--muted); font-weight: var(--fw-body); margin-bottom: 0; }
+
+    .contact { padding-bottom: 76px; }
+
+    .contact-card {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 0;
+      align-items: stretch;
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(254,90,1,.07), transparent 28rem),
+        linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.88));
+      box-shadow: var(--shadow);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -120px -120px auto;
+      width: 280px;
+      height: 280px;
+      background: rgba(254,90,1,.06);
+      border-radius: 999px;
+      pointer-events: none;
+    }
+
+    .contact-copy {
+      border-radius: var(--radius-xl) 0 0 var(--radius-xl);
+      padding: clamp(28px, 5vw, 44px);
+      color: var(--ink);
+      background:
+        linear-gradient(rgba(8,9,12,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(8,9,12,.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.72), rgba(247,247,248,.92));
+      background-size: 42px 42px, 42px 42px, auto;
+      border-right: 1px solid var(--line);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-copy::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      top: 0;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, var(--orange), transparent);
+      opacity: .85;
+    }
+
+    .contact-copy > * { position: relative; z-index: 1; }
+    .contact-copy h2 {
+      color: var(--black);
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      letter-spacing: -.05em;
+      margin-bottom: 0;
+    }
+    .contact-copy p {
+      color: var(--muted);
+      font-weight: var(--fw-body);
+      margin-top: 14px;
+    }
+
+    .contact-copy-intro {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .contact-copy-icon {
+      width: 100px;
+      height: 100px;
+      flex: 0 0 auto;
+    }
+
+    .contact-copy-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .support-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(254,90,1,.22);
+      background: rgba(254,90,1,.08);
+      color: #9d3500;
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: .78rem;
+      font-weight: var(--fw-subhead);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .support-badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 5px rgba(34,197,94,.14);
+    }
+
+    .contact-channels {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .contact-channel {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 28px rgba(8,9,12,.04);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    button.contact-channel {
+      width: 100%;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .contact-channel:hover {
+      border-color: rgba(254,90,1,.28);
+      box-shadow: 0 12px 28px rgba(8,9,12,.06);
+    }
+
+    .channel-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(254,90,1,.1);
+      color: var(--orange);
+      font-size: .72rem;
+      font-weight: var(--fw-subhead);
+      letter-spacing: .02em;
+      flex: 0 0 auto;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .contact-channel:hover .channel-icon {
+      background: linear-gradient(135deg, var(--orange), var(--orange-2));
+      color: white;
+    }
+
+    .channel-text {
+      display: grid;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .email-dialog {
+      width: min(420px, calc(100vw - 32px));
+      padding: 0;
+      border: none;
+      border-radius: 24px;
+      background: transparent;
+      color: var(--ink);
+      z-index: 120;
+    }
+
+    .email-dialog::backdrop {
+      background: rgba(8, 9, 12, .58);
+      backdrop-filter: blur(6px);
+    }
+
+    .email-dialog-card {
+      position: relative;
+      padding: 28px 24px 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background: #fff;
+      box-shadow: 0 28px 70px rgba(8, 9, 12, .18);
+    }
+
+    .email-dialog-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      border-radius: 999px;
+      background: rgba(8, 9, 12, .06);
+      color: var(--muted);
+      font-size: 1.4rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease;
+    }
+
+    .email-dialog-close:hover {
+      background: rgba(254, 90, 1, .12);
+      color: var(--orange);
+    }
+
+    .email-dialog-card h3 {
+      margin: 8px 0 14px;
+      font-size: 1.45rem;
+      letter-spacing: -.04em;
+    }
+
+    .email-dialog-address {
+      margin: 0 0 20px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #fbfbfc;
+      font-size: 1.05rem;
+      font-weight: var(--fw-subhead);
+      color: var(--ink);
+      word-break: break-all;
+    }
+
+    .email-dialog-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .channel-label {
+      font-weight: var(--fw-subhead);
+      font-size: .95rem;
+      color: var(--ink);
+    }
+
+    .channel-hint {
+      font-size: .82rem;
+      color: var(--muted);
+      font-weight: var(--fw-body);
+    }
+
+    .contact-form {
+      padding: clamp(28px, 5vw, 44px);
+      display: grid;
+      gap: 14px;
+      align-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .field { display: grid; gap: 8px; }
+
+    .field label {
+      font-weight: var(--fw-subhead);
+      font-size: .92rem;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 15px;
+      font: inherit;
+      background: #fbfbfc;
+      outline: none;
+      transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      border-color: rgba(254, 90, 1, .45);
+      box-shadow: 0 0 0 4px rgba(254,90,1,.1);
+    }
+
+    textarea { min-height: 112px; resize: vertical; }
+
+    .field select {
+      appearance: none;
+      cursor: pointer;
+      padding-right: 42px;
+      background:
+        #fbfbfc
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9L12 15L18 9' stroke='%236f737d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")
+        no-repeat right 14px center;
+    }
+
+    .service-picker {
+      position: relative;
+    }
+
+    .service-picker-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 56px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: #fbfbfc;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+    .service-picker-toggle:hover {
+      border-color: rgba(254,90,1,.22);
+      background: #fff;
+    }
+
+    .service-picker.is-open .service-picker-toggle,
+    .service-picker-toggle:focus-visible {
+      border-color: rgba(254, 90, 1, .45);
+      box-shadow: 0 0 0 4px rgba(254,90,1,.1);
+      outline: none;
+    }
+
+    .service-picker-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      display: grid;
+      place-items: center;
+      background: rgba(254,90,1,.1);
+      color: var(--orange);
+      font-size: .72rem;
+      font-weight: var(--fw-subhead);
+      flex: 0 0 auto;
+    }
+
+    .service-picker-icon.dark {
+      background: var(--black);
+      color: white;
+    }
+
+    .service-picker-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 13px;
+      overflow: hidden;
+      flex: 0 0 auto;
+      background: linear-gradient(135deg, rgba(254,90,1,.12), rgba(8,9,12,.06));
+    }
+
+    .service-picker-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .service-picker-thumb .service-picker-icon {
+      width: 100%;
+      height: 100%;
+      border-radius: 13px;
+    }
+
+    .service-picker-text {
+      display: grid;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .service-picker-label {
+      font-weight: var(--fw-subhead);
+      color: var(--ink);
+      font-size: .94rem;
+    }
+
+    .service-picker-hint {
+      font-size: .8rem;
+      color: var(--muted);
+      font-weight: var(--fw-body);
+    }
+
+    .service-picker-chevron {
+      flex: 0 0 auto;
+      color: var(--muted);
+      transition: transform .2s ease;
+    }
+
+    .service-picker.is-open .service-picker-chevron {
+      transform: rotate(180deg);
+      color: var(--orange);
+    }
+
+    .service-picker-menu {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 8px);
+      z-index: 20;
+      display: grid;
+      gap: 6px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.98);
+      box-shadow: 0 22px 60px rgba(8,9,12,.14);
+      backdrop-filter: blur(16px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      pointer-events: none;
+      transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    }
+
+    .service-picker.is-open .service-picker-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .service-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      background: transparent;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+      transition: background .2s ease, border-color .2s ease;
+    }
+
+    .service-option:hover {
+      background: rgba(254,90,1,.06);
+      border-color: rgba(254,90,1,.14);
+    }
+
+    .service-option.is-selected {
+      background: rgba(254,90,1,.08);
+      border-color: rgba(254,90,1,.22);
+    }
+
+    .service-option .service-picker-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+    }
+
+    .service-picker select {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .service-picker.is-open {
+      z-index: 30;
+    }
+
+    .form-note {
+      color: var(--muted);
+      font-size: .9rem;
+      font-weight: 650;
+      margin: 0;
+    }
+
+    footer {
+      position: relative;
+      padding: 52px 0 0;
+      color: var(--muted);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(254,90,1,.12), transparent 34rem),
+        linear-gradient(180deg, transparent, rgba(8,9,12,.04));
+    }
+
+    .footer-inner {
+      border-top: 1px solid var(--line);
+      padding-top: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      font-weight: 750;
+      position: relative;
+      z-index: 2;
+    }
+
+    .mega-footer {
+      margin-top: 30px;
+      font-size: clamp(4.5rem, 18.6vw, 18rem);
+      line-height: .72;
+      font-weight: 1000;
+      letter-spacing: -.12em;
+      color: var(--black);
+      white-space: nowrap;
+      width: 100%;
+      max-width: 100%;
+      overflow: hidden;
+      text-align: center;
+      transform-origin: center bottom;
+      user-select: none;
+    }
+
+    .mega-footer .mega-orange {
+      color: var(--orange);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-14px) rotate(1deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: .7; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    @keyframes lineIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes shine {
+      40%, 100% { transform: translateX(120%); }
+    }
+
+
+    @media (max-width: 980px) {
+      .hero-grid-upgraded {
+        grid-template-columns: 1fr;
+      }
+
+      .command-center {
+        min-height: auto;
+      }
+
+      .hero-proof {
+        grid-template-columns: 1fr;
+      }
+
+      .workflow-map {
+        height: 360px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .hero-bg-word {
+        bottom: 4vw;
+        font-size: 22vw;
+      }
+
+      .command-top,
+      .command-bottom {
+        grid-template-columns: 1fr;
+      }
+
+      .command-top {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .workflow-map {
+        height: 470px;
+      }
+
+      .workflow-core {
+        width: 126px;
+        height: 126px;
+      }
+
+      .workflow-node {
+        min-width: 118px;
+        padding: 12px;
+      }
+
+      .node-a { left: 50%; top: 6%; transform: translateX(-50%); }
+      .node-b { right: 4%; top: 31%; }
+      .node-c { left: 4%; bottom: 31%; }
+      .node-d { right: 50%; bottom: 6%; transform: translateX(50%); }
+    }
+
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 980px) {
+      .spotlight { display: none; }
+
+      .nav-links { display: none; }
+      .drawer-toggle { display: inline-flex; align-items: center; justify-content: center; }
+
+      .hero-grid,
+      .band-grid,
+      .contact-card {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-copy {
+        border-right: none;
+        border-bottom: 1px solid var(--line);
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+      }
+
+      .hero { padding-top: 54px; }
+      .hero-card { min-height: auto; }
+      .grid-3 { grid-template-columns: 1fr; }
+
+      .catalogue-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+
+      .catalogue-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        margin-bottom: 18px;
+      }
+
+      .catalogue-search {
+        flex: none;
+        min-height: 40px;
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .catalogue-search svg {
+        width: 15px;
+        height: 15px;
+      }
+
+      .catalogue-search input {
+        font-size: .88rem;
+      }
+
+      .catalogue-filters {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        gap: 6px;
+        padding-bottom: 2px;
+      }
+
+      .catalogue-filters::-webkit-scrollbar {
+        display: none;
+      }
+
+      .filter-chip {
+        flex: 0 0 auto;
+        padding: 7px 12px;
+        font-size: .78rem;
+      }
+
+      .product-card-body {
+        padding: 12px;
+        gap: 6px;
+      }
+
+      .product-card-body h3 {
+        font-size: .92rem;
+        letter-spacing: -.03em;
+      }
+
+      .product-card-body p {
+        font-size: .76rem;
+        line-height: 1.35;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .product-card-body .button {
+        width: 100%;
+        min-height: 34px;
+        padding: 0 10px;
+        font-size: .76rem;
+        justify-content: center;
+      }
+
+      .steps { grid-template-columns: repeat(2, 1fr); }
+
+      .section-head { display: block; }
+      .section-copy { margin-top: 16px; }
+    }
+
+    @media (max-width: 620px) {
+      .container {
+        width: min(100% - 24px, var(--max));
+      }
+
+      .nav-inner { height: 70px; }
+      .brand span { display: none; }
+      .button.hide-mobile { display: none; }
+
+      .nav-actions > .lang-text {
+        font-size: .88rem;
+        gap: 5px;
+      }
+
+      .stats,
+      .steps {
+        grid-template-columns: 1fr;
+      }
+
+      h1 { font-size: clamp(2.8rem, 16vw, 4.1rem); }
+
+      .hero-actions .button { width: 100%; }
+
+      .contact-copy-intro {
+        flex-direction: column;
+      }
+
+      .floating-chip { display: none; }
+
+      .hero-minimal-inner {
+        padding-top: clamp(88px, 15vh, 130px);
+      }
+
+      .minimal-title {
+        letter-spacing: -.03em;
+      }
+
+
+      .hero-minimal-inner {
+        padding-top: 40px;
+      }
+
+      .hero-dotted-line {
+        height: 220px;
+        opacity: .58;
+        filter: none;
+      }
+
+      .hero-tape {
+        padding: 11px 0;
+      }
+
+      .hero-tape-one {
+        top: 33%;
+        transform: rotate(-9deg);
+      }
+
+      .hero-tape-two {
+        top: 64%;
+        transform: rotate(7deg);
+      }
+
+      .hero-tape-item {
+        font-size: .72rem;
+        letter-spacing: .08em;
+      }
+
+      .hero-dot-grid {
+        background-size: 38px 38px;
+        opacity: .38;
+      }
+
+      .hero-corner-dot {
+        display: none;
+      }
+
+      .mega-footer {
+        font-size: 24vw;
+        letter-spacing: -.14em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="spotlight" aria-hidden="true"></div>
+  <div class="site">
+    <nav class="nav">
+      <div class="container nav-inner">
+        <a class="brand" href="#top" aria-label=" AMFPHUB home">
+          <img src="./assets/logo.jpeg" alt=" AMFPHUB logo" />
+          <span>amfp<span>hub</span></span>
+        </a>
+
+        <div class="nav-links" aria-label="Main navigation">
+          <a href="#services" data-i18n="nav.services">Services</a>
+          <a href="#audience" data-i18n="nav.audience">Who we help</a>
+          <a href="#contact" data-i18n="nav.contact">Contact</a>
+        </div>
+
+        <div class="nav-actions">
+          <div class="lang-text" aria-label="Language toggle">
+            <span class="lang-choice" data-set-lang="en" role="button" tabindex="0">EN</span>
+            <span>/</span>
+            <span class="lang-choice" data-set-lang="id" role="button" tabindex="0">ID</span>
+          </div>
+          <button class="drawer-toggle" type="button" aria-controls="mobileDrawer" aria-expanded="false" data-i18n="nav.menu">Menu</button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="drawer-backdrop" data-close-drawer></div>
+    <aside class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+      <div class="drawer-head">
+        <a class="brand" href="#top" data-close-drawer aria-label=" AMFPHUB home">
+          <img src="./assets/logo.jpeg" alt=" AMFPHUB logo" />
+          <span>amfp<span>hub</span></span>
+        </a>
+        <button class="drawer-close" type="button" data-close-drawer data-i18n="nav.close">Close</button>
+      </div>
+
+      <nav class="drawer-links" aria-label="Mobile navigation">
+        <a href="#services" data-close-drawer data-i18n="nav.services">Services</a>
+        <a href="#audience" data-close-drawer data-i18n="nav.audience">Who we help</a>
+        <a href="#contact" data-close-drawer data-i18n="nav.contact">Contact</a>
+      </nav>
+    </aside>
+
+    <main id="top">
+      <header class="hero hero-minimal">
+        <div class="hero-minimal-bg" aria-hidden="true">
+          <div class="hero-tapes">
+            <div class="hero-tape hero-tape-one">
+              <div class="hero-tape-track">
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Automation</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> AI Implementation</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> n8n Workflows</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> LLM API</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> RAG Chatbot</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Convert API</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Automation</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> AI Implementation</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> n8n Workflows</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> LLM API</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> RAG Chatbot</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Convert API</span>
+              </div>
+            </div>
+            <div class="hero-tape hero-tape-two">
+              <div class="hero-tape-track hero-tape-track-reverse">
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Students</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Developers</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Business</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Implementation</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Integration</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Production Ready</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Students</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Developers</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Business</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Implementation</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Integration</span>
+                <span class="hero-tape-item"><span class="tape-mark">◆</span> Production Ready</span>
+              </div>
+            </div>
+          </div>
+          <div class="hero-soft-glow"></div>
+          <div class="hero-dot-grid"></div>
+          <svg class="hero-dotted-line" viewBox="0 0 1600 360" preserveAspectRatio="none">
+            <path d="M-60 205 C180 40, 385 92, 580 180 C780 270, 965 285, 1190 152 C1370 48, 1500 84, 1660 146"></path>
+            <path class="line-soft" d="M-80 122 C155 215, 320 240, 530 126 C745 10, 950 52, 1160 148 C1365 242, 1505 246, 1680 180"></path>
+            <path class="line-ghost" d="M-80 270 C150 250, 320 168, 510 218 C720 274, 870 324, 1085 230 C1290 140, 1450 118, 1680 214"></path>
+            <path class="line-hair" d="M-90 72 C170 96, 390 42, 620 92 C900 152, 1080 88, 1300 66 C1460 50, 1550 70, 1690 112"></path>
+            <path class="line-accent-soft" d="M-100 316 C120 286, 315 332, 545 300 C775 268, 950 318, 1175 286 C1400 254, 1515 284, 1700 304"></path>
+          </svg>
+        </div>
+
+        <div class="container hero-minimal-inner hero-copy reveal">
+          <div class="hero-word-wrap">
+            <h1 class="hero-title minimal-title" data-i18n-html="hero.title" data-no-split="true">AMFP<span class="accent">HUB</span></h1>
+            <div class="hero-quote" data-i18n="hero.quote">Automation and AI for developers, students, and business</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="marquee-wrap" aria-hidden="true">
+        <div class="marquee">
+          <span>AI IMPLEMENTATION</span><span class="orange">•</span>
+          <span>AUTOMATION</span><span class="orange">•</span>
+          <span>LLM API</span><span class="orange">•</span>
+          <span>RAG CHATBOT</span><span class="orange">•</span>
+          <span>CONVERT API</span><span class="orange">•</span>
+          <span>N8N WORKFLOWS</span><span class="orange">•</span>
+          <span>AI IMPLEMENTATION</span><span class="orange">•</span>
+          <span>AUTOMATION</span><span class="orange">•</span>
+          <span>LLM API</span><span class="orange">•</span>
+          <span>RAG CHATBOT</span><span class="orange">•</span>
+          <span>CONVERT API</span><span class="orange">•</span>
+          <span>N8N WORKFLOWS</span><span class="orange">•</span>
+        </div>
+      </div>
+
+      <section id="services">
+        <div class="container">
+          <div class="section-head reveal">
+            <div>
+              <div class="kicker" data-i18n="services.kicker">What we sell</div>
+              <h2 data-i18n="services.title">Simple products for real technology problems.</h2>
+            </div>
+            <p class="section-copy" data-i18n="services.copy">
+              Start small, automate repetitive work, connect your apps, and add AI where it actually helps.
+            </p>
+          </div>
+
+          <div class="catalogue-toolbar reveal">
+            <label class="catalogue-search" for="catalogueSearch">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
+                <path d="M20 20L16.5 16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <input id="catalogueSearch" type="search" placeholder="Search products..." autocomplete="off" />
+            </label>
+            <div class="catalogue-filters" role="group" aria-label="Product categories">
+              <button type="button" class="filter-chip is-active" data-filter="all" data-i18n="catalogue.filter.all">All</button>
+              <button type="button" class="filter-chip" data-filter="automation" data-i18n="catalogue.filter.automation">Automation</button>
+              <button type="button" class="filter-chip" data-filter="ai" data-i18n="catalogue.filter.ai">AI</button>
+              <button type="button" class="filter-chip" data-filter="api" data-i18n="catalogue.filter.api">API</button>
+            </div>
+          </div>
+
+          <p class="catalogue-empty" id="catalogueEmpty" data-i18n="catalogue.empty">No products match your search.</p>
+
+          <div class="catalogue-grid" id="catalogueGrid">
+            <article class="product-card reveal" data-tags="automation workflow api n8n">
+              <a class="product-card-media" href="./products/n8n.html" aria-label="n8n Automation">
+                <!-- <img src="./assets/products/n8n.svg" alt="n8n Automation" /> -->
+                 <img src="./assets/products/n8n.jpeg" alt="n8n Automation" />
+              </a>
+              <div class="product-card-body">
+                <h3 data-i18n="service.n8n.title">n8n Automation</h3>
+                <p data-i18n="service.n8n.copy">
+                  Private n8n setup for automating business workflows, notifications, data movement, APIs, and internal operations.
+                </p>
+                <a class="button ghost" href="./products/n8n.html" data-i18n="catalogue.seeMore">See more</a>
+              </div>
+            </article>
+
+            <article class="product-card reveal" data-tags="ai llm api chatbot rag sapai">
+              <a class="product-card-media" href="./products/sapai.html" aria-label="SapAi LLM API">
+                <!-- <img src="./assets/products/sapai.svg" alt="SapAi LLM API" /> -->
+                 <img src="./assets/products/sapai.png" alt="">
+              </a>
+              <div class="product-card-body">
+                <h3 data-i18n="service.sapai.title">SapAi LLM API</h3>
+                <p data-i18n="service.sapai.copy">
+                  LLM API access for chatbots, RAG, summaries, classification, and AI features inside your own app or website.
+                </p>
+                <a class="button ghost" href="./products/sapai.html" data-i18n="catalogue.seeMore">See more</a>
+              </div>
+            </article>
+
+            <article class="product-card reveal" data-tags="api files conversion convert">
+              <a class="product-card-media" href="./products/convert-api.html" aria-label="Convert API">
+                <!-- <img src="./assets/products/convert-api.svg" alt="Convert API" /> -->
+                 <img src="./assets/products/convert.png" alt="">
+              </a>
+              <div class="product-card-body">
+                <h3 data-i18n="service.convert.title">Convert API</h3>
+                <p data-i18n="service.convert.copy">
+                  File conversion API for documents, images, and everyday conversion tasks that your product or team needs.
+                </p>
+                <a class="button ghost" href="./products/convert-api.html" data-i18n="catalogue.seeMore">See more</a>
+              </div>
+            </article>
+
+            <article class="product-card reveal" data-tags="template n8n">
+              <a class="product-card-media" href="./products/convert-api.html" aria-label="n8n workflow">
+                <!-- <img src="./assets/products/convert-api.svg" alt="Convert API" /> -->
+                 <img src="./assets/products/n8n workflow.png" alt="">
+              </a>
+              <div class="product-card-body">
+                <h3 data-i18n="service.n8n-workflow.title">8000+ n8n workflow template</h3>
+                <p data-i18n="service.n8n-workflow.copy">
+                  File conversion API for documents, images, and everyday conversion tasks that your product or team needs.
+                </p>
+                <a class="button ghost" href="./products/n8n-workflow.html" data-i18n="catalogue.seeMore">See more</a>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="audience">
+        <div class="container">
+          <div class="band reveal">
+            <div class="band-grid">
+              <div>
+                <div class="kicker" data-i18n="audience.kicker">Who we help</div>
+                <h2 style="margin-bottom: 1rem;" data-i18n="audience.title">For learners, builders, and growing teams.</h2>
+                <p data-i18n="audience.copy">
+                   AMFPHUB focuses on implementation: not just theory, not just tools, but making technology useful in daily work. We can also help your business with automation, custom applications, and integrating AI into the tools you already use.
+                </p>
+                <div class="hero-actions">
+                  <a class="button primary" href="#contact" data-i18n="audience.cta">Get implementation help</a>
+                </div>
+              </div>
+
+              <div class="check-list">
+                <div class="check">
+                  <div>
+                    <strong class="check-label" data-i18n="audience.students.title">Students</strong><br />
+                    <span data-i18n="audience.students.copy">Learn AI, automation, APIs, and build portfolio-ready projects.</span>
+                  </div>
+                </div>
+                <div class="check">
+                  <div>
+                    <strong class="check-label" data-i18n="audience.devs.title">Developers</strong><br />
+                    <span data-i18n="audience.devs.copy">Add AI, document conversion, and workflow automation to apps faster.</span>
+                  </div>
+                </div>
+                <div class="check">
+                  <div>
+                    <strong class="check-label" data-i18n="audience.business.title">Small to mid businesses</strong><br />
+                    <span data-i18n="audience.business.copy">Reduce manual work, connect existing tools, and create practical AI assistants.</span>
+                  </div>
+                </div>
+                <div class="check">
+                  <div>
+                    <strong class="check-label" data-i18n="audience.automation.title">Business automation</strong><br />
+                    <span data-i18n="audience.automation.copy">Automate repetitive tasks, sync data between systems, and streamline internal operations with n8n workflows.</span>
+                  </div>
+                </div>
+                <div class="check">
+                  <div>
+                    <strong class="check-label" data-i18n="audience.apps.title">Custom applications</strong><br />
+                    <span data-i18n="audience.apps.copy">Build web apps, dashboards, and internal tools tailored to how your team actually works.</span>
+                  </div>
+                </div>
+                <div class="check">
+                  <div>
+                    <strong class="check-label" data-i18n="audience.ai.title">AI integration</strong><br />
+                    <span data-i18n="audience.ai.copy">Add chatbots, LLM features, RAG, and intelligent assistants into your existing apps and workflows.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <div class="container">
+          <div class="section-head reveal">
+            <div>
+              <div class="kicker" data-i18n="support.kicker">24/7 support</div>
+              <h2 data-i18n="support.title">Contact us anytime.</h2>
+            </div>
+            <p class="section-copy" data-i18n="support.copy">
+              Reach our team through WhatsApp, email, or our online marketplace   we respond fast, day or night.
+            </p>
+          </div>
+
+          <div class="contact-card reveal">
+            <div class="contact-copy">
+              <div class="contact-copy-intro">
+                <div class="contact-copy-icon">
+                  <svg viewBox="0 0 512 512" id="Layer_1" version="1.1" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g id="_x30_20_24_x2F_7_Customer_Support"> <g> <g> <path d="M507.998,211.681c0,81.321-46.76,151.722-114.882,185.802c-5.64-6.72-13.56-11.64-22.76-13.6 l-21.96-7.12c71.561-20.801,123.842-86.842,123.842-165.083c0-95.001-77.001-171.963-171.962-171.963 c-70.721,0-131.442,42.68-157.802,103.721l-5.24-38.88c-0.2-5.84-1.561-11.4-3.92-16.4 c37.84-51.041,98.521-84.161,166.962-84.161C414.957,3.998,507.998,96.919,507.998,211.681z" style="fill:#FC8A8A;"></path> </g> <g> <path d="M507.998,211.681c0,3.04-0.08,6.08-0.2,9.08c-4.56-110.722-95.761-198.963-207.523-198.963 c-66.281,0-125.242,31.041-163.283,79.361c-0.52-4.6-1.8-9-3.68-13c37.84-51.041,98.521-84.161,166.962-84.161 C414.957,3.998,507.998,96.919,507.998,211.681z" style="fill:#FCB0B0;"></path> </g> <g> <path d="M507.998,211.681c0,81.321-46.76,151.722-114.882,185.802c-3.399-4.04-7.64-7.44-12.48-9.92 c63.44-34.4,123.961-109.522,127.161-184.603C507.918,205.841,507.998,208.761,507.998,211.681z" style="fill:#F96364;"></path> </g> <g> <g> <g> <path d="M287.022,502.978C139.006,450.349,30.453,320.286,5.144,165.244 C-3.981,109.309,42.606,59.956,99.018,65.041c0.46,0.042,0.921,0.083,1.382,0.125c20.537,1.851,36.197,18.791,36.829,39.387 l8.07,59.921c4.826,20.077-5.654,40.633-24.988,47.883l-0.79,0.294c-22.875,8.622-32.943,35.287-21.623,56.946 c25.138,47.987,60.324,90.146,103.043,123.461c19.285,15.01,47.321,9.873,59.894-11.091l0.431-0.724 c10.59-17.726,32.688-24.361,51.579-16.022l57.511,18.656c20.15,4.305,34.016,22.742,32.166,43.279l-0.125,1.382 C397.312,484.949,340.424,521.959,287.022,502.978z" style="fill:#7BDE9E;"></path> </g> </g> <g> <g> <path d="M27.337,191.817c11.776,71.8,41.329,138.232,84.405,194.127 C56.607,325.066,18.783,248.799,5.13,165.21C-3.977,109.302,42.57,59.982,99.044,65.073l1.356,0.122 c17.356,1.564,31.213,13.886,35.429,30.054c-4.07-1.87-8.47-3.087-13.216-3.515l-1.425-0.128 C64.783,86.521,18.229,135.908,27.337,191.817z" style="fill:#A7EABF;"></path> </g> </g> <g> <g> <path d="M402.523,427.141l-0.128,1.424c-5.085,56.406-62.002,93.377-115.38,74.418 c-79.467-28.282-147.56-78.846-197.493-143.629c47.186,52.028,107.009,92.755,175.287,117.022 c53.377,18.959,110.294-18.012,115.379-74.418l0.128-1.424c0.428-4.746,0.023-9.361-1.157-13.705 C394.374,393.942,404.087,409.785,402.523,427.141z" style="fill:#51D27F;"></path> </g> </g> <path d="M512,211.683C512,94.963,417.022,0,300.274,0c-64.732,0-126.437,30.25-166.43,81.076 c-7.25-11.013-19.204-18.643-33.073-19.892l-1.395-0.125c-28.332-2.566-55.684,7.938-75.075,28.77 c-19.203,20.633-27.625,48.356-23.106,76.06C26.82,322.856,135.83,453.467,285.684,506.75c9.891,3.516,20.106,5.25,30.262,5.25 c17,0,33.84-4.863,48.7-14.383c23.969-15.352,39.18-40.399,41.735-68.72l0.125-1.383c0.942-10.448-1.901-20.448-7.418-28.65 C468.846,362.05,512,290.784,512,211.683z M398.537,426.795l-0.125,1.383c-2.328,25.84-16.211,48.692-38.083,62.704 c-21.633,13.855-47.868,16.895-71.966,8.328C141.255,446.905,34.246,318.688,9.093,164.6 c-4.121-25.243,3.559-50.509,21.067-69.321c17.692-19.008,42.665-28.594,68.521-26.25l1.359,0.125 c18.352,1.652,32.618,16.922,33.188,35.52c0.008,0.141,0.016,0.277,0.035,0.414l8.07,59.923c0.02,0.133,0.043,0.27,0.074,0.398 c4.375,18.18-5.301,36.754-22.489,43.2l-0.809,0.301c-11.938,4.496-21.387,13.906-25.93,25.817 c-4.563,11.965-3.77,25.348,2.176,36.727c25.239,48.18,61.243,91.318,104.127,124.76c10.125,7.883,23.153,11.067,35.739,8.707 c12.531-2.34,23.481-9.957,30.055-20.918l0.422-0.711c9.422-15.766,29.43-21.961,46.528-14.41 c0.125,0.055,0.254,0.102,0.383,0.145l57.513,18.656c0.133,0.043,0.266,0.078,0.398,0.105 C387.717,391.678,400.194,408.447,398.537,426.795z M314.271,361.478c-20.754-9.059-44.989-1.457-56.446,17.727l-0.418,0.703 c-5.387,8.977-14.371,15.227-24.653,17.149c-10.324,1.918-21.032-0.676-29.352-7.152 c-41.989-32.743-77.243-74.986-101.955-122.158c-4.887-9.348-5.539-20.344-1.793-30.168c3.731-9.77,11.485-17.492,21.258-21.176 l0.805-0.297c20.91-7.844,32.715-30.325,27.52-52.36l-2.651-19.686c26.791-60.984,86.992-100.339,153.688-100.339 c92.615,0,167.963,75.349,167.963,167.963c0,73.825-49.206,139.793-119.802,160.877L314.271,361.478z M393.943,392.538 c-5.956-6.097-13.67-10.589-22.543-12.529l-10.229-3.318c68.314-25.231,115.066-91.367,115.066-165.009 c0-97.025-78.939-175.964-175.964-175.964c-65.729,0-125.399,36.506-155.617,94.017l-3.436-25.516 c-0.192-5.434-1.366-10.622-3.319-15.409c38.394-50.62,98.894-80.811,162.373-80.811C412.608,7.998,504,99.37,504,211.681 C504,288.326,461.898,357.338,393.943,392.538z" style="fill:#333333;"></path> </g> <g> <g> <path d="M208.014,216.109c0-4.137-0.988-7.391-2.969-9.766c-1.98-2.379-5.082-3.566-9.305-3.566 c-8.711,0-13.328,5.942-13.856,17.817h-18.082c0.527-10.996,3.871-19.332,10.031-25.008c6.156-5.676,13.942-8.512,23.36-8.512 c9.59,0,16.957,2.488,22.106,7.457c5.145,4.973,7.719,11.594,7.719,19.86c0,6.516-1.914,13.047-5.738,19.602 c-3.828,6.555-8.692,12.582-14.586,18.078c-5.895,5.5-12.098,10.227-18.606,14.188h40.778v15.176h-65.591v-13.856 C193.099,246.902,208.014,229.746,208.014,216.109z" style="fill:#FEDD8E;"></path> <path d="M228.867,284.434h-65.591c-1.656,0-3-1.344-3-3v-13.856c0-0.984,0.48-1.906,1.289-2.465 c28.832-19.989,43.45-36.473,43.45-49.005c0-3.399-0.766-6.035-2.273-7.844c-1.395-1.676-3.684-2.488-7-2.488 c-4.375,0-10.262,1.551-10.86,14.949c-0.07,1.606-1.391,2.867-2.996,2.867h-18.082c-0.82,0-1.605-0.336-2.172-0.93 c-0.566-0.594-0.863-1.395-0.824-2.215c0.563-11.758,4.262-20.867,10.996-27.071c6.695-6.172,15.239-9.305,25.391-9.305 c10.344,0,18.485,2.793,24.188,8.297c5.731,5.539,8.637,12.949,8.637,22.02c0,7.02-2.066,14.121-6.149,21.114 c-3.957,6.777-9.047,13.09-15.129,18.762c-3.477,3.242-7.094,6.25-10.813,8.992h30.938c1.656,0,3,1.344,3,3v15.176 C231.867,283.09,230.523,284.434,228.867,284.434z M166.276,278.434h59.591v-9.176h-37.778c-1.344,0-2.527-0.895-2.887-2.191 c-0.363-1.293,0.18-2.672,1.328-3.371c6.313-3.844,12.41-8.492,18.117-13.821c5.656-5.27,10.379-11.125,14.043-17.395 c3.535-6.063,5.328-12.149,5.328-18.09c0-7.488-2.227-13.278-6.805-17.703c-4.547-4.387-11.281-6.613-20.02-6.613 c-8.719,0-15.692,2.523-21.325,7.719c-4.945,4.555-7.91,11.207-8.828,19.801h12.063c1.57-14.637,9.793-17.817,16.637-17.817 c5.137,0,9.043,1.563,11.61,4.648c2.43,2.914,3.664,6.844,3.664,11.684c0,14.614-14.637,31.969-44.739,53.036L166.276,278.434 L166.276,278.434z" style="fill:#333333;"></path> </g> <g> <path d="M242.391,263.489v-15.442l44.606-60.052h19.93v59.391h12.141v16.102h-12.141v18.739h-18.742 v-18.739L242.391,263.489L242.391,263.489z M289.637,209.773l-28.243,37.614h28.243V209.773z" style="fill:#FEDD8E;"></path> <path d="M306.927,285.227h-18.742c-1.656,0-3-1.344-3-3v-15.739h-42.794c-1.656,0-3-1.344-3-3v-15.442 c0-0.645,0.207-1.273,0.59-1.789l44.606-60.052c0.566-0.762,1.461-1.211,2.41-1.211h19.93c1.656,0,3,1.344,3,3v56.391h9.141 c1.656,0,3,1.344,3,3v16.102c0,1.656-1.344,3-3,3h-9.141v15.739C309.927,283.883,308.583,285.227,306.927,285.227z M291.184,279.227h12.742v-15.739c0-1.656,1.344-3,3-3h9.141v-10.102h-9.141c-1.656,0-3-1.344-3-3v-56.391h-15.422 l-43.114,58.044v11.449h42.794c1.656,0,3,1.344,3,3V279.227z M289.637,250.386h-28.243c-1.137,0-2.176-0.641-2.684-1.66 c-0.508-1.016-0.398-2.23,0.285-3.141l28.243-37.614c0.777-1.031,2.129-1.445,3.348-1.047c1.227,0.41,2.051,1.559,2.051,2.848 v37.614C292.637,249.043,291.294,250.386,289.637,250.386z M267.399,244.386h19.239v-25.621L267.399,244.386z" style="fill:#333333;"></path> </g> <g> <path d="M377.664,157.249l-35.766,148.865h-17.949l35.766-148.865H377.664z" style="fill:#FEDD8E;"></path> <path d="M341.896,309.114h-17.949c-0.918,0-1.789-0.422-2.356-1.145c-0.57-0.719-0.777-1.664-0.563-2.555 l35.766-148.865c0.324-1.352,1.531-2.301,2.918-2.301h17.949c0.918,0,1.789,0.422,2.355,1.145 c0.57,0.719,0.777,1.664,0.563,2.555l-35.766,148.865C344.49,308.164,343.283,309.114,341.896,309.114z M327.751,303.114h11.781 l34.325-142.865h-11.781L327.751,303.114z" style="fill:#333333;"></path> </g> <g> <path d="M448.657,202.117l-34.051,80.111h-19.27l34.446-77.997h-43.153v-15.969h62.028L448.657,202.117 L448.657,202.117z" style="fill:#FEDD8E;"></path> <path d="M414.604,285.227h-19.27c-1.016,0-1.961-0.512-2.512-1.363c-0.555-0.848-0.641-1.922-0.234-2.848 l32.586-73.786h-38.547c-1.656,0-3-1.344-3-3v-15.969c0-1.656,1.344-3,3-3h62.028c1.656,0,3,1.344,3,3v13.856 c0,0.402-0.082,0.801-0.238,1.172L417.366,283.4C416.893,284.508,415.807,285.227,414.604,285.227z M399.94,279.227h12.68 l33.036-77.72v-10.246h-56.028v9.969h40.153c1.016,0,1.961,0.512,2.512,1.363c0.555,0.848,0.641,1.922,0.234,2.848 L399.94,279.227z M448.655,202.116h0.039H448.655z" style="fill:#333333;"></path> </g> </g> </g> </g> </g></svg>
+                </div>
+                <div>
+                    <h2 data-i18n="contact.title">Need help or want to start a project?</h2>
+                    <p data-i18n="contact.copy">
+                      Pick the channel that works best for you. We can help with n8n workflows, LLM API integration, and file conversion systems.
+                    </p>
+                </div>
+              </div>
+
+              <div class="contact-channels">
+                <a class="contact-channel" id="whatsappDirect" href="#">
+                  <div
+                  style="width: 30px; height: 30px;"
+                  >
+                    <svg viewBox="0 0 48 48" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>Whatsapp-color</title> <desc>Created with Sketch.</desc> <defs> </defs> <g id="Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="Color-" transform="translate(-700.000000, -360.000000)" fill="#67C15E"> <path d="M723.993033,360 C710.762252,360 700,370.765287 700,383.999801 C700,389.248451 701.692661,394.116025 704.570026,398.066947 L701.579605,406.983798 L710.804449,404.035539 C714.598605,406.546975 719.126434,408 724.006967,408 C737.237748,408 748,397.234315 748,384.000199 C748,370.765685 737.237748,360.000398 724.006967,360.000398 L723.993033,360.000398 L723.993033,360 Z M717.29285,372.190836 C716.827488,371.07628 716.474784,371.034071 715.769774,371.005401 C715.529728,370.991464 715.262214,370.977527 714.96564,370.977527 C714.04845,370.977527 713.089462,371.245514 712.511043,371.838033 C711.806033,372.557577 710.056843,374.23638 710.056843,377.679202 C710.056843,381.122023 712.567571,384.451756 712.905944,384.917648 C713.258648,385.382743 717.800808,392.55031 724.853297,395.471492 C730.368379,397.757149 732.00491,397.545307 733.260074,397.27732 C735.093658,396.882308 737.393002,395.527239 737.971421,393.891043 C738.54984,392.25405 738.54984,390.857171 738.380255,390.560912 C738.211068,390.264652 737.745308,390.095816 737.040298,389.742615 C736.335288,389.389811 732.90737,387.696673 732.25849,387.470894 C731.623543,387.231179 731.017259,387.315995 730.537963,387.99333 C729.860819,388.938653 729.198006,389.89831 728.661785,390.476494 C728.238619,390.928051 727.547144,390.984595 726.969123,390.744481 C726.193254,390.420348 724.021298,389.657798 721.340985,387.273388 C719.267356,385.42535 717.856938,383.125756 717.448104,382.434484 C717.038871,381.729275 717.405907,381.319529 717.729948,380.938852 C718.082653,380.501232 718.421026,380.191036 718.77373,379.781688 C719.126434,379.372738 719.323884,379.160897 719.549599,378.681068 C719.789645,378.215575 719.62006,377.735746 719.450874,377.382942 C719.281687,377.030139 717.871269,373.587317 717.29285,372.190836 Z" id="Whatsapp"> </path> </g> </g> </g></svg>
+                  </div>
+                  <span class="channel-text">
+                    <span class="channel-label" data-i18n="contact.whatsapp">WhatsApp</span>
+                    <span class="channel-hint" data-i18n="contact.whatsapp.hint">Chat with us instantly</span>
+                  </span>
+                </a>
+                <button type="button" class="contact-channel" id="emailDirect">
+                  <div style="width: 30px; height: 30px;">
+                    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M2 11.9556C2 8.47078 2 6.7284 2.67818 5.39739C3.27473 4.22661 4.22661 3.27473 5.39739 2.67818C6.7284 2 8.47078 2 11.9556 2H20.0444C23.5292 2 25.2716 2 26.6026 2.67818C27.7734 3.27473 28.7253 4.22661 29.3218 5.39739C30 6.7284 30 8.47078 30 11.9556V20.0444C30 23.5292 30 25.2716 29.3218 26.6026C28.7253 27.7734 27.7734 28.7253 26.6026 29.3218C25.2716 30 23.5292 30 20.0444 30H11.9556C8.47078 30 6.7284 30 5.39739 29.3218C4.22661 28.7253 3.27473 27.7734 2.67818 26.6026C2 25.2716 2 23.5292 2 20.0444V11.9556Z" fill="white"></path> <path d="M22.0515 8.52295L16.0644 13.1954L9.94043 8.52295V8.52421L9.94783 8.53053V15.0732L15.9954 19.8466L22.0515 15.2575V8.52295Z" fill="#EA4335"></path> <path d="M23.6231 7.38639L22.0508 8.52292V15.2575L26.9983 11.459V9.17074C26.9983 9.17074 26.3978 5.90258 23.6231 7.38639Z" fill="#FBBC05"></path> <path d="M22.0508 15.2575V23.9924H25.8428C25.8428 23.9924 26.9219 23.8813 26.9995 22.6513V11.459L22.0508 15.2575Z" fill="#34A853"></path> <path d="M9.94811 24.0001V15.0732L9.94043 15.0669L9.94811 24.0001Z" fill="#C5221F"></path> <path d="M9.94014 8.52404L8.37646 7.39382C5.60179 5.91001 5 9.17692 5 9.17692V11.4651L9.94014 15.0667V8.52404Z" fill="#C5221F"></path> <path d="M9.94043 8.52441V15.0671L9.94811 15.0734V8.53073L9.94043 8.52441Z" fill="#C5221F"></path> <path d="M5 11.4668V22.6591C5.07646 23.8904 6.15673 24.0003 6.15673 24.0003H9.94877L9.94014 15.0671L5 11.4668Z" fill="#4285F4"></path> </g></svg>
+                  </div>
+                  <span class="channel-text">
+                    <span class="channel-label" data-i18n="contact.email">Email</span>
+                    <span class="channel-hint" id="emailHint">Send email to amfphub@gmail.com</span>
+                  </span>
+                </button>
+                <a class="contact-channel" id="shopeeDirect" href="#" target="_blank" rel="noopener noreferrer">
+                  <div style="width: 30px; height: 30px;">
+                    <?xml version="1.0" encoding="utf-8"?><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 109.59 122.88" style="enable-background:new 0 0 109.59 122.88" xml:space="preserve"><style type="text/css"><![CDATA[
+                      .st0{fill:#EE4D2D;}
+                    ]]></style><g><path class="st0" d="M74.98,91.98C76.15,82.36,69.96,76.22,53.6,71c-7.92-2.7-11.66-6.24-11.57-11.12 c0.33-5.4,5.36-9.34,12.04-9.47c4.63,0.09,9.77,1.22,14.76,4.56c0.59,0.37,1.01,0.32,1.35-0.2c0.46-0.74,1.61-2.53,2-3.17 c0.26-0.42,0.31-0.96-0.35-1.44c-0.95-0.7-3.6-2.13-5.03-2.72c-3.88-1.62-8.23-2.64-12.86-2.63c-9.77,0.04-17.47,6.22-18.12,14.47 c-0.42,5.95,2.53,10.79,8.86,14.47c1.34,0.78,8.6,3.67,11.49,4.57c9.08,2.83,13.8,7.9,12.69,13.81c-1.01,5.36-6.65,8.83-14.43,8.93 c-6.17-0.24-11.71-2.75-16.02-6.1c-0.11-0.08-0.65-0.5-0.72-0.56c-0.53-0.42-1.11-0.39-1.47,0.15c-0.26,0.4-1.92,2.8-2.34,3.43 c-0.39,0.55-0.18,0.86,0.23,1.2c1.8,1.5,4.18,3.14,5.81,3.97c4.47,2.28,9.32,3.53,14.48,3.72c3.32,0.22,7.5-0.49,10.63-1.81 C70.63,102.67,74.25,97.92,74.98,91.98L74.98,91.98z M54.79,7.18c-10.59,0-19.22,9.98-19.62,22.47h39.25 C74.01,17.16,65.38,7.18,54.79,7.18L54.79,7.18z M94.99,122.88l-0.41,0l-80.82-0.01h0c-5.5-0.21-9.54-4.66-10.09-10.19l-0.05-1 l-3.61-79.5v0C0,32.12,0,32.06,0,32c0-1.28,1.03-2.33,2.3-2.35l0,0h25.48C28.41,13.15,40.26,0,54.79,0s26.39,13.15,27.01,29.65 h25.4h0.04c1.3,0,2.35,1.05,2.35,2.35c0,0.04,0,0.08,0,0.12v0l-3.96,79.81l-0.04,0.68C105.12,118.21,100.59,122.73,94.99,122.88 L94.99,122.88z"/></g></svg>
+                  </div>
+                  <span class="channel-text">
+                    <span class="channel-label" data-i18n="contact.marketplace-shopee">Shopee</span>
+                    <span class="channel-hint" data-i18n="contact.marketplace-shopee.hint">Order through our store</span>
+                  </span>
+                </a>
+
+                <a class="contact-channel" id="tokopediaDirect" href="#" target="_blank" rel="noopener noreferrer">
+                  <div>
+                    <img src="./assets/tokopedia.png" alt="Tokopedia" style="width: 30px; height: 30px;">
+                  </div>
+                  <span class="channel-text">
+                    <span class="channel-label" data-i18n="contact.marketplace-tokopedia">Tokopedia</span>
+                    <span class="channel-hint" data-i18n="contact.marketplace-tokopedia.hint">Order through our store</span>
+                  </span>
+                </a>
+              </div>
+            </div>
+
+            <form class="contact-form" id="contactForm">
+              <div class="field">
+                <label for="name" data-i18n="form.name">Name</label>
+                <input id="name" name="name" placeholder="John Doe" autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="service" data-i18n="form.service">Service</label>
+                <div class="service-picker" id="servicePicker">
+                  <button type="button" class="service-picker-toggle" aria-expanded="false" aria-haspopup="listbox" aria-controls="serviceMenu">
+                    <span class="service-picker-thumb" id="servicePickerThumb">
+                      <img id="servicePickerIcon" src="./assets/products/n8n.jpeg" alt="n8n Automation" />
+                    </span>
+                    <span class="service-picker-text">
+                      <span class="service-picker-label" id="servicePickerLabel" data-i18n="service.n8n.title">n8n Automation</span>
+                      <span class="service-picker-hint" id="servicePickerHint" data-i18n="service.n8n.short">Workflow & automation setup</span>
+                    </span>
+                    <svg class="service-picker-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </button>
+                  <div class="service-picker-menu" id="serviceMenu" role="listbox" aria-label="Service options">
+                    <button type="button" class="service-option is-selected" role="option" aria-selected="true" data-value="n8n" data-image="./assets/products/n8n.jpeg" data-label-key="service.n8n.title" data-hint-key="service.n8n.short">
+                      <span class="service-picker-thumb">
+                        <img src="./assets/products/n8n.jpeg" alt="n8n Automation" />
+                      </span>
+                      <span class="service-picker-text">
+                        <span class="service-picker-label" data-i18n="service.n8n.title">n8n Automation</span>
+                        <span class="service-picker-hint" data-i18n="service.n8n.short">Workflow & automation setup</span>
+                      </span>
+                    </button>
+                    <button type="button" class="service-option" role="option" aria-selected="false" data-value="SapAi" data-image="./assets/products/sapai.png" data-label-key="service.sapai.title" data-hint-key="service.sapai.short">
+                      <span class="service-picker-thumb">
+                        <img src="./assets/products/sapai.png" alt="SapAi LLM API" />
+                      </span>
+                      <span class="service-picker-text">
+                        <span class="service-picker-label" data-i18n="service.sapai.title">SapAi LLM API</span>
+                        <span class="service-picker-hint" data-i18n="service.sapai.short">LLM, chatbot & RAG features</span>
+                      </span>
+                    </button>
+                    <button type="button" class="service-option" role="option" aria-selected="false" data-value="Convert API" data-image="./assets/products/convert.png" data-label-key="service.convert.title" data-hint-key="service.convert.short">
+                      <span class="service-picker-thumb">
+                        <img src="./assets/products/convert.png" alt="Convert API" />
+                      </span>
+                      <span class="service-picker-text">
+                        <span class="service-picker-label" data-i18n="service.convert.title">Convert API</span>
+                        <span class="service-picker-hint" data-i18n="service.convert.short">File conversion for your product</span>
+                      </span>
+                    </button>
+                    <button type="button" class="service-option" role="option" aria-selected="false" data-value="n8n-workflow" data-image="./assets/products/n8n workflow.png" data-label-key="service.n8n-workflow.title" data-hint-key="service.n8n-workflow.short">
+                      <span class="service-picker-thumb">
+                        <img src="./assets/products/n8n workflow.png" alt="8000+ template workflow n8n" />
+                      </span>
+                      <span class="service-picker-text">
+                        <span class="service-picker-label" data-i18n="service.n8n-workflow.title">8000+ template workflow n8n</span>
+                        <span class="service-picker-hint" data-i18n="service.n8n-workflow.short">Ready-made n8n workflow templates</span>
+                      </span>
+                    </button>
+                    <button type="button" class="service-option" role="option" aria-selected="false" data-value="Custom" data-icon="+" data-icon-class="dark" data-label-key="service.custom.title" data-hint-key="service.custom.short">
+                      <span class="service-picker-thumb">
+                        <span class="service-picker-icon dark">+</span>
+                      </span>
+                      <span class="service-picker-text">
+                        <span class="service-picker-label" data-i18n="service.custom.title">Custom implementation</span>
+                        <span class="service-picker-hint" data-i18n="service.custom.short">Tailored AI or automation project</span>
+                      </span>
+                    </button>
+                  </div>
+                  <select id="service" name="service" tabindex="-1" aria-hidden="true">
+                    <option value="n8n" selected>n8n Automation</option>
+                    <option value="SapAi">SapAi LLM API</option>
+                    <option value="Convert API">Convert API</option>
+                    <option value="n8n-workflow">8000+ template workflow n8n</option>
+                    <option value="Custom">Custom implementation</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="message" data-i18n="form.message">What do you need?</label>
+                <textarea id="message" name="message" placeholder="I want to automate..."></textarea>
+              </div>
+              <button class="button primary" type="submit" data-i18n="form.submit">Send via WhatsApp</button>
+              <p class="form-note" data-i18n="form.note">
+                Quick message form   opens WhatsApp with your details pre-filled.
+              </p>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container footer-inner">
+        <div>© <span id="year"></span>  AMFPHUB</div>
+        <div data-i18n="footer.copy">Technology, AI implementation, and automation.</div>
+      </div>
+      <div class="mega-footer" aria-hidden="true">AMFP<span class="mega-orange">HUB</span></div>
+    </footer>
+  </div>
+
+  <dialog class="email-dialog" id="emailDialog" aria-labelledby="emailDialogTitle">
+    <div class="email-dialog-card">
+      <button type="button" class="email-dialog-close" id="emailDialogClose" aria-label="Close">&times;</button>
+      <h3 id="emailDialogTitle" data-i18n="contact.email.dialog.title">Send email to</h3>
+      <p class="email-dialog-address" id="emailDialogAddress">amfphub@gmail.com</p>
+      <div class="email-dialog-actions">
+        <button type="button" class="button primary" id="emailCopyBtn" data-i18n="contact.email.dialog.copy">Copy email</button>
+        <button type="button" class="button ghost" id="emailDialogDone" data-i18n="contact.email.dialog.close">Close</button>
+      </div>
+    </div>
+  </dialog>
+
+  <iframe
+    id="sapai-embed-widget"
+    src="https://sapai.amfphub.com/embed/t/et_08f5f1b3b825e6a52e90061bd8d2f4f6bb148a2757500850?widget=1"
+    title="SapAi assistant"
+    style="position:fixed;bottom:20px;right:20px;border:0;border-radius:16px;background:transparent;z-index:2147483000;box-shadow:0 8px 32px rgba(0,0,0,0.2);width:min(312px,calc(100vw - 40px));height:min(428px,calc(100dvh - 40px));max-width:calc(100vw - 40px);max-height:calc(100dvh - 40px)"
+    allow="clipboard-write"
+  ></iframe>
+  <script src="./assets/sapai-embed.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    const WHATSAPP_NUMBER = "62895634881326"; // TODO: replace with your real WhatsApp number, example: 6281234567890
+    const CONTACT_EMAIL = "amfphub@gmail.com"; // TODO: replace with your support email
+    const SHOPEE_URL = "https://shopee.co.id/amfphub?entryPoint=ShopBySearch&searchKeyword=amfphub"; // TODO: replace with your Shopee store link
+    const TOKOPEDIA_URL = "www.tokopedia.com/amfphub"; // TODO: replace with your Tokopedia store link
+
+    const dictionary = {
+      en: {
+        "nav.services": "Services",
+        "nav.audience": "Who we help",
+        "nav.contact": "Contact",
+        "nav.cta": "Start project",
+        "nav.menu": "Menu",
+        "nav.close": "Close",
+
+        "hero.eyebrow": "From idea to production-ready tech",
+        "hero.title": "AMFP<span class=\"accent\">HUB</span>",
+        "hero.quote": "Automation and AI for developers, students, and business",
+        "hero.lead": " AMFPHUB helps students, developers, and small to mid businesses build practical automations, LLM integrations, file conversion APIs, and AI workflows without overcomplicating the stack.",
+        "hero.primary": "See what we build",
+        "hero.secondary": "Start implementation",
+        "hero.proof.students": "Students building portfolio projects",
+        "hero.proof.devs": "Developers adding AI features",
+        "hero.proof.business": "Businesses automating manual work",
+        "command.title": "Implementation OS",
+        "command.status": "Live stack",
+        "command.center": "AI implementation",
+        "command.node.automation": "Automation",
+        "command.node.app": "Your app",
+        "command.node.ready": "Ready to use",
+        "command.float.fast": "Fast setup",
+
+        "stats.products": "active products",
+        "stats.focus": "practical implementation",
+        "stats.lang": "bilingual support",
+
+        "terminal.1": "connect n8n workflows",
+        "terminal.2": "integrate SapAi LLM API",
+        "terminal.3": "convert files with Convert API",
+        "terminal.4": "ship practical AI systems",
+        "terminal.5": "ready for real users",
+
+        "services.kicker": "What we sell",
+        "services.title": "Simple products for real technology problems.",
+        "services.copy": "Start small, automate repetitive work, connect your apps, and add AI where it actually helps.",
+        "catalogue.seeMore": "See more",
+        "catalogue.search": "Search products...",
+        "catalogue.empty": "No products match your search.",
+        "catalogue.filter.all": "All",
+        "catalogue.filter.automation": "Automation",
+        "catalogue.filter.ai": "AI",
+        "catalogue.filter.api": "API",
+        "service.n8n.title": "n8n Automation",
+        "service.n8n.short": "Workflow & automation setup",
+        "service.n8n.copy": "Private n8n setup for automating business workflows, notifications, data movement, APIs, and internal operations.",
+        "service.sapai.title": "SapAi LLM API",
+        "service.sapai.short": "LLM, chatbot & RAG features",
+        "service.sapai.copy": "LLM API access for chatbots, RAG, summaries, classification, and AI features inside your own app or website.",
+        "service.convert.title": "Convert API",
+        "service.convert.short": "File conversion for your product",
+        "service.convert.copy": "File conversion API for documents, images, and everyday conversion tasks that your product or team needs.",
+        "service.custom.title": "Custom implementation",
+        "service.custom.short": "Tailored AI or automation project",
+        "service.n8n-workflow.title": "8000+ template workflow n8n",
+        "service.n8n-workflow.short": "Ready-made n8n workflow templates",
+        "service.n8n-workflow.copy": "n8n workflow templates to automate business workflows, notifications, data movement, APIs, and internal operations.",
+
+        "audience.kicker": "Who we help",
+        "audience.title": "For learners, developer, and growing businesses.",
+        "audience.copy": "AMFPHUB focuses on implementation, not just theory, not just tools, but making technology useful in daily work. We can also help your business with automation, custom applications, and integrating AI into the tools you already use.",
+        "audience.cta": "Get implementation help",
+        "audience.students.title": "Students",
+        "audience.students.copy": "Learn AI, automation, APIs, and build portfolio-ready projects.",
+        "audience.devs.title": "Developers",
+        "audience.devs.copy": "Add AI, document conversion, and workflow automation to apps faster.",
+        "audience.business.title": "Small to mid businesses",
+        "audience.business.copy": "Reduce manual work, connect existing tools, and create practical AI assistants.",
+        "audience.automation.title": "Business automation",
+        "audience.automation.copy": "Automate repetitive tasks, sync data between systems, and streamline internal operations with n8n workflows.",
+        "audience.apps.title": "Custom applications",
+        "audience.apps.copy": "Build web apps, dashboards, and internal tools tailored to how your team actually works.",
+        "audience.ai.title": "AI integration",
+        "audience.ai.copy": "Add chatbots, LLM features, RAG, and intelligent assistants into your existing apps and workflows.",
+
+        "support.kicker": "24/7 support",
+        "support.title": "Contact us anytime.",
+        "support.copy": "Reach our team through WhatsApp, email, or our online marketplace   we respond fast, day or night.",
+        "support.badge": "24 hour customer support",
+        "contact.title": "Need help or want to start a project?",
+        "contact.copy": "Pick the channel that works best for you. We can help with n8n workflows, LLM API integration, and file conversion systems.",
+        "contact.whatsapp": "WhatsApp",
+        "contact.whatsapp.hint": "Chat with us instantly",
+        "contact.email": "Email",
+        "contact.email.dialog.title": "Send email to",
+        "contact.email.dialog.copy": "Copy email",
+        "contact.email.dialog.copied": "Copied!",
+        "contact.email.dialog.close": "Close",
+        "contact.marketplace-shopee": "Shopee",
+        "contact.marketplace-shopee.hint": "Order through Shopee",
+        "contact.marketplace-tokopedia": "Tokopedia",
+        "contact.marketplace-tokopedia.hint": "Order through Tokopedia",
+        "form.name": "Name",
+        "form.service": "Service",
+        "form.message": "What do you need?",
+        "form.submit": "Send via WhatsApp",
+        "form.note": "Quick message form   opens WhatsApp with your details pre-filled.",
+        "footer.copy": "Technology, AI implementation, and automation."
+      },
+      id: {
+        "nav.services": "Layanan",
+        "nav.audience": "Untuk siapa",
+        "nav.contact": "Kontak",
+        "nav.cta": "Mulai proyek",
+        "nav.menu": "Menu",
+        "nav.close": "Tutup",
+
+        "hero.eyebrow": "Dari ide ke teknologi siap pakai",
+        "hero.title": "AMFP<span class=\"accent\">HUB</span>",
+        "hero.quote": "Automasi, AI, dan API   dibangun menjadi sistem yang benar-benar bisa dipakai.",
+        "hero.lead": " AMFPHUB membantu mahasiswa, developer, dan bisnis kecil hingga menengah membangun automasi, integrasi LLM, API konversi file, dan workflow AI tanpa bikin stack jadi ribet.",
+        "hero.primary": "Lihat yang kami bangun",
+        "hero.secondary": "Mulai implementasi",
+        "hero.proof.students": "Mahasiswa membangun proyek portfolio",
+        "hero.proof.devs": "Developer menambahkan fitur AI",
+        "hero.proof.business": "Bisnis mengotomatisasi kerja manual",
+        "command.title": "Implementation OS",
+        "command.status": "Stack live",
+        "command.center": "Implementasi AI",
+        "command.node.automation": "Automasi",
+        "command.node.app": "Aplikasi kamu",
+        "command.node.ready": "Siap dipakai",
+        "command.float.fast": "Setup cepat",
+
+        "stats.products": "produk aktif",
+        "stats.focus": "implementasi praktis",
+        "stats.lang": "dukungan dua bahasa",
+
+        "terminal.1": "hubungkan workflow n8n",
+        "terminal.2": "integrasikan SapAi LLM API",
+        "terminal.3": "konversi file dengan Convert API",
+        "terminal.4": "kirim sistem AI yang praktis",
+        "terminal.5": "siap untuk pengguna nyata",
+
+        "services.kicker": "Yang dijual",
+        "services.title": "Produk sederhana untuk masalah teknologi nyata.",
+        "services.copy": "Mulai dari kecil, otomatisasi pekerjaan berulang, hubungkan aplikasi, dan pakai AI di bagian yang benar-benar berguna.",
+        "catalogue.seeMore": "Lihat selengkapnya",
+        "catalogue.search": "Cari produk...",
+        "catalogue.empty": "Tidak ada produk yang cocok dengan pencarian.",
+        "catalogue.filter.all": "Semua",
+        "catalogue.filter.automation": "Automasi",
+        "catalogue.filter.ai": "AI",
+        "catalogue.filter.api": "API",
+        "service.n8n.title": "Automasi n8n",
+        "service.n8n.short": "Setup workflow & automasi",
+        "service.n8n.copy": "Setup n8n privat untuk mengotomatisasi workflow bisnis, notifikasi, perpindahan data, API, dan operasional internal.",
+        "service.sapai.title": "SapAi LLM API",
+        "service.sapai.short": "LLM, chatbot & fitur RAG",
+        "service.sapai.copy": "Akses LLM API untuk chatbot, RAG, ringkasan, klasifikasi, dan fitur AI di aplikasi atau website kamu sendiri.",
+        "service.convert.title": "Convert API",
+        "service.convert.short": "Konversi file untuk produkmu",
+        "service.convert.copy": "API konversi file untuk dokumen, gambar, dan kebutuhan konversi harian yang dibutuhkan produk atau tim kamu.",
+        "service.custom.title": "Implementasi custom",
+        "service.custom.short": "Proyek AI atau automasi khusus",
+        "service.n8n-workflow.title": "8000+ template workflow n8n",
+        "service.n8n-workflow.short": "Template workflow n8n siap pakai",
+        "service.n8n-workflow.copy": "Template workflow n8n untuk mengotomatisasi workflow bisnis, notifikasi, perpindahan data, API, dan operasional internal.",
+
+        "audience.kicker": "Untuk siapa",
+        "audience.title": "Untuk pelajar, developer, dan bisnis yang berkembang.",
+        "audience.copy": "AMFPHUB fokus pada implementasi, bukan hanya teori, bukan hanya tools, tapi membuat teknologi benar-benar berguna dalam pekerjaan sehari-hari. Kami juga bisa membantu bisnis Anda dengan automasi, aplikasi custom, dan integrasi AI ke tools yang sudah ada.",
+        "audience.cta": "Minta bantuan implementasi",
+        "audience.students.title": "Mahasiswa",
+        "audience.students.copy": "Belajar AI, automasi, API, dan membangun proyek yang layak masuk portfolio.",
+        "audience.devs.title": "Developer",
+        "audience.devs.copy": "Tambahkan AI, konversi dokumen, dan automasi workflow ke aplikasi dengan lebih cepat.",
+        "audience.business.title": "Bisnis kecil hingga menengah",
+        "audience.business.copy": "Kurangi kerja manual, hubungkan tools yang sudah ada, dan buat asisten AI yang praktis.",
+        "audience.automation.title": "Automasi bisnis",
+        "audience.automation.copy": "Otomatisasi tugas berulang, sinkronkan data antar sistem, dan percepat operasional internal dengan workflow n8n.",
+        "audience.apps.title": "Aplikasi custom",
+        "audience.apps.copy": "Bangun web app, dashboard, dan tools internal yang disesuaikan dengan cara kerja tim Anda.",
+        "audience.ai.title": "Integrasi AI",
+        "audience.ai.copy": "Tambahkan chatbot, fitur LLM, RAG, dan asisten cerdas ke aplikasi dan workflow yang sudah ada.",
+
+        "support.kicker": "Dukungan 24/7",
+        "support.title": "Hubungi kami kapan saja.",
+        "support.copy": "Hubungi tim kami lewat WhatsApp, email, atau marketplace online   respons cepat, siang maupun malam.",
+        "support.badge": "Dukungan pelanggan 24 jam",
+        "contact.title": "Butuh bantuan atau ingin mulai proyek?",
+        "contact.copy": "Pilih channel yang paling nyaman. Kami bisa bantu workflow n8n, integrasi LLM API, dan sistem konversi file.",
+        "contact.whatsapp": "WhatsApp",
+        "contact.whatsapp.hint": "Chat langsung dengan kami",
+        "contact.email": "Email",
+        "contact.email.dialog.title": "Kirim email ke",
+        "contact.email.dialog.copy": "Salin email",
+        "contact.email.dialog.copied": "Tersalin!",
+        "contact.email.dialog.close": "Tutup",
+        "contact.marketplace-shopee": "Shopee",
+        "contact.marketplace-shopee.hint": "Pesan lewat Shopee",
+        "contact.marketplace-tokopedia": "Tokopedia",
+        "contact.marketplace-tokopedia.hint": "Pesan lewat Tokopedia",
+        "form.name": "Nama",
+        "form.service": "Layanan",
+        "form.message": "Apa yang kamu butuhkan?",
+        "form.submit": "Kirim lewat WhatsApp",
+        "form.note": "Form pesan cepat   membuka WhatsApp dengan detail kamu sudah terisi.",
+        "footer.copy": "Teknologi, implementasi AI, dan automasi."
+      }
+    };
+
+    const html = document.documentElement;
+    const savedLang = localStorage.getItem("amfphub_lang");
+    const initialLang = savedLang || (navigator.language && navigator.language.toLowerCase().startsWith("id") ? "id" : "en");
+
+    function splitHeroTitle() {
+      const title = document.querySelector(".hero-title");
+      if (!title) return;
+
+      if (title.dataset.noSplit === "true") {
+        const markup = title.innerHTML.trim();
+        title.innerHTML = `<span class="split-word"><span>${markup}</span></span>`;
+        return;
+      }
+
+      const text = title.textContent.trim();
+      const words = text.split(/\s+/);
+      const accentWords = ["AI", "AI,"];
+      title.innerHTML = words.map((word) => {
+        const clean = word.replace(/[.,]/g, "");
+        const cls = accentWords.includes(clean) ? " accent" : "";
+        return `<span class="split-word"><span class="${cls}">${word}</span></span>`;
+      }).join(" ");
+    }
+
+    function setLanguage(lang) {
+      html.dataset.lang = lang;
+      html.lang = lang;
+      localStorage.setItem("amfphub_lang", lang);
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (dictionary[lang][key]) element.textContent = dictionary[lang][key];
+      });
+
+      document.querySelectorAll("[data-i18n-html]").forEach((element) => {
+        const key = element.dataset.i18nHtml;
+        if (dictionary[lang][key]) element.innerHTML = dictionary[lang][key];
+      });
+
+      const message = document.getElementById("message");
+      if (message) {
+        message.placeholder = lang === "id" ? "Saya ingin otomatisasi..." : "I want to automate...";
+      }
+
+      const catalogueSearch = document.getElementById("catalogueSearch");
+      if (catalogueSearch && dictionary[lang]["catalogue.search"]) {
+        catalogueSearch.placeholder = dictionary[lang]["catalogue.search"];
+      }
+
+      splitHeroTitle();
+      runIntroAnimation();
+      filterCatalogue();
+      initContactLinks();
+      syncServicePickerDisplay();
+    }
+
+    function initServicePicker() {
+      const picker = document.getElementById("servicePicker");
+      const toggle = picker?.querySelector(".service-picker-toggle");
+      const menu = document.getElementById("serviceMenu");
+      const select = document.getElementById("service");
+      const options = picker?.querySelectorAll(".service-option");
+      if (!picker || !toggle || !menu || !select || !options) return;
+
+      const closePicker = () => {
+        picker.classList.remove("is-open");
+        toggle.setAttribute("aria-expanded", "false");
+      };
+
+      const openPicker = () => {
+        picker.classList.add("is-open");
+        toggle.setAttribute("aria-expanded", "true");
+      };
+
+      toggle.addEventListener("click", () => {
+        if (picker.classList.contains("is-open")) closePicker();
+        else openPicker();
+      });
+
+      options.forEach((option) => {
+        option.addEventListener("click", () => {
+          select.value = option.dataset.value;
+          options.forEach((item) => {
+            const selected = item === option;
+            item.classList.toggle("is-selected", selected);
+            item.setAttribute("aria-selected", selected ? "true" : "false");
+          });
+          syncServicePickerDisplay();
+          closePicker();
+        });
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!picker.contains(event.target)) closePicker();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closePicker();
+      });
+    }
+
+    function syncServicePickerDisplay() {
+      const picker = document.getElementById("servicePicker");
+      const select = document.getElementById("service");
+      if (!picker || !select) return;
+
+      const lang = html.dataset.lang || "en";
+      const active = picker.querySelector(`.service-option[data-value="${CSS.escape(select.value)}"]`);
+      if (!active) return;
+
+      const thumb = document.getElementById("servicePickerThumb");
+      const label = document.getElementById("servicePickerLabel");
+      const hint = document.getElementById("servicePickerHint");
+      const labelText = active.dataset.labelKey && dictionary[lang][active.dataset.labelKey]
+        ? dictionary[lang][active.dataset.labelKey]
+        : "";
+
+      if (thumb) {
+        if (active.dataset.image) {
+          thumb.innerHTML = `<img id="servicePickerIcon" src="${active.dataset.image}" alt="${labelText.replace(/"/g, "&quot;")}" />`;
+        } else {
+          const icon = active.dataset.icon || "•";
+          const darkClass = active.dataset.iconClass === "dark" ? " dark" : "";
+          thumb.innerHTML = `<span class="service-picker-icon${darkClass}">${icon}</span>`;
+        }
+      }
+
+      if (label && labelText) {
+        label.textContent = labelText;
+      }
+
+      if (hint && active.dataset.hintKey && dictionary[lang][active.dataset.hintKey]) {
+        hint.textContent = dictionary[lang][active.dataset.hintKey];
+      }
+    }
+
+    function initCatalogueFilter() {
+      const searchInput = document.getElementById("catalogueSearch");
+      const filterButtons = document.querySelectorAll(".filter-chip");
+
+      if (searchInput) {
+        searchInput.addEventListener("input", filterCatalogue);
+      }
+
+      filterButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          filterButtons.forEach((chip) => chip.classList.remove("is-active"));
+          button.classList.add("is-active");
+          filterCatalogue();
+        });
+      });
+    }
+
+    function filterCatalogue() {
+      const searchInput = document.getElementById("catalogueSearch");
+      const emptyState = document.getElementById("catalogueEmpty");
+      const cards = document.querySelectorAll("#catalogueGrid .product-card");
+      const activeFilter = document.querySelector(".filter-chip.is-active");
+      const query = (searchInput?.value || "").trim().toLowerCase();
+      const category = activeFilter?.dataset.filter || "all";
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const tags = (card.dataset.tags || "").toLowerCase();
+        const text = card.textContent.toLowerCase();
+        const matchesCategory = category === "all" || tags.includes(category);
+        const matchesSearch = !query || text.includes(query) || tags.includes(query);
+        const isVisible = matchesCategory && matchesSearch;
+
+        card.classList.toggle("is-hidden", !isVisible);
+        if (isVisible) visibleCount += 1;
+      });
+
+      if (emptyState) {
+        emptyState.classList.toggle("is-visible", visibleCount === 0);
+      }
+    }
+
+    document.querySelectorAll("[data-set-lang]").forEach((item) => {
+      const selectLanguage = () => setLanguage(item.dataset.setLang);
+      item.addEventListener("click", selectLanguage);
+      item.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          selectLanguage();
+        }
+      });
+    });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function initFallbackReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = "1";
+            entry.target.style.transform = "translateY(0)";
+          }
+        });
+      }, { threshold: .14 });
+
+      document.querySelectorAll(".reveal").forEach((el) => {
+        el.style.transition = "opacity .7s ease, transform .7s ease";
+        observer.observe(el);
+      });
+    }
+
+    function runIntroAnimation() {
+      initHeroTapes();
+
+      const title = document.querySelector(".hero-title");
+      if (title && title.dataset.noSplit === "true") {
+        return;
+      }
+
+      if (!window.gsap) {
+        initFallbackReveal();
+        return;
+      }
+
+      gsap.set(".hero-title .split-word > span", { yPercent: 110 });
+      gsap.to(".hero-title .split-word > span", {
+        yPercent: 0,
+        duration: .9,
+        ease: "power4.out",
+        stagger: .045
+      });
+    }
+
+    function initHeroTapes() {
+      if (!window.gsap || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      gsap.from(".hero-tape-one", {
+        opacity: 0,
+        xPercent: -18,
+        duration: 1,
+        ease: "power3.out",
+        delay: .15
+      });
+
+      gsap.from(".hero-tape-two", {
+        opacity: 0,
+        xPercent: 18,
+        duration: 1,
+        ease: "power3.out",
+        delay: .28
+      });
+    }
+
+    function initGsap() {
+      if (!window.gsap || !window.ScrollTrigger) {
+        initFallbackReveal();
+        return;
+      }
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.set(".reveal", { opacity: 0, y: 34 });
+
+      gsap.to(".hero-copy", { opacity: 1, y: 0, duration: .7, ease: "power3.out" });
+      gsap.to(".hero-card", { opacity: 1, y: 0, duration: .9, ease: "power3.out", delay: .12 });
+
+      gsap.utils.toArray("section .reveal").forEach((el) => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          duration: .75,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: el,
+            start: "top 84%",
+            once: true
+          }
+        });
+      });
+
+      gsap.to(".blob.one", {
+        x: 70,
+        y: 40,
+        scale: 1.18,
+        duration: 7,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+      gsap.to(".blob.two", {
+        x: -80,
+        y: -44,
+        scale: .92,
+        duration: 8,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+
+      gsap.to(".marquee", {
+        xPercent: -50,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".marquee-wrap",
+          start: "top bottom",
+          end: "bottom top",
+          scrub: 1
+        }
+      });
+
+      gsap.to(".mega-footer", {
+        yPercent: -8,
+        scale: 1.025,
+        ease: "none",
+        scrollTrigger: {
+          trigger: "footer",
+          start: "top bottom",
+          end: "bottom bottom",
+          scrub: true
+        }
+      });
+    }
+
+    function initSpotlight() {
+      const spotlight = document.querySelector(".spotlight");
+      if (!spotlight) return;
+      window.addEventListener("pointermove", (event) => {
+        spotlight.style.left = `${event.clientX}px`;
+        spotlight.style.top = `${event.clientY}px`;
+      });
+    }
+
+    function initTilt() {
+      document.querySelectorAll(".tilt").forEach((card) => {
+        card.addEventListener("pointermove", (event) => {
+          const rect = card.getBoundingClientRect();
+          const x = event.clientX - rect.left;
+          const y = event.clientY - rect.top;
+          const rx = ((y / rect.height) - .5) * -8;
+          const ry = ((x / rect.width) - .5) * 8;
+          card.style.transform = `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+        });
+        card.addEventListener("pointerleave", () => {
+          card.style.transform = "";
+        });
+      });
+    }
+
+    initCatalogueFilter();
+    initServicePicker();
+    setLanguage(initialLang);
+    initGsap();
+    initSpotlight();
+    initTilt();
+
+    function initDrawer() {
+      const drawer = document.getElementById("mobileDrawer");
+      const toggle = document.querySelector(".drawer-toggle");
+      const closeTargets = document.querySelectorAll("[data-close-drawer]");
+      if (!drawer || !toggle) return;
+
+      const openDrawer = () => {
+        document.body.classList.add("drawer-open");
+        drawer.setAttribute("aria-hidden", "false");
+        toggle.setAttribute("aria-expanded", "true");
+      };
+
+      const closeDrawer = () => {
+        document.body.classList.remove("drawer-open");
+        drawer.setAttribute("aria-hidden", "true");
+        toggle.setAttribute("aria-expanded", "false");
+      };
+
+      toggle.addEventListener("click", openDrawer);
+      closeTargets.forEach((target) => target.addEventListener("click", closeDrawer));
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeDrawer();
+      });
+    }
+
+    initDrawer();
+
+    function initContactLinks() {
+      const lang = html.dataset.lang || "en";
+      const whatsappText = lang === "id"
+        ? "Halo  AMFPHUB, saya ingin bertanya tentang layanan kalian."
+        : "Hi  AMFPHUB, I have a question about your services.";
+
+      const whatsappDirect = document.getElementById("whatsappDirect");
+      const emailDirect = document.getElementById("emailDirect");
+      const shopeeDirect = document.getElementById("shopeeDirect");
+      const tokopediaDirect = document.getElementById("tokopediaDirect");
+
+      if (whatsappDirect) {
+        whatsappDirect.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappText)}`;
+      }
+      if (emailDirect) {
+        const emailHint = document.getElementById("emailHint");
+        if (emailHint) {
+          emailHint.textContent = lang === "id"
+            ? `Kirim email ke ${CONTACT_EMAIL}`
+            : `Send email to ${CONTACT_EMAIL}`;
+        }
+      }
+      if (shopeeDirect) {
+        shopeeDirect.href = SHOPEE_URL;
+      }
+      if (tokopediaDirect) {
+        tokopediaDirect.href = TOKOPEDIA_URL;
+      }
+    }
+
+    initContactLinks();
+
+    function initEmailDialog() {
+      const emailDirect = document.getElementById("emailDirect");
+      const dialog = document.getElementById("emailDialog");
+      const closeBtn = document.getElementById("emailDialogClose");
+      const doneBtn = document.getElementById("emailDialogDone");
+      const copyBtn = document.getElementById("emailCopyBtn");
+      const addressEl = document.getElementById("emailDialogAddress");
+
+      if (addressEl) {
+        addressEl.textContent = CONTACT_EMAIL;
+      }
+
+      const closeDialog = () => dialog?.close();
+
+      emailDirect?.addEventListener("click", () => {
+        dialog?.showModal();
+      });
+
+      closeBtn?.addEventListener("click", closeDialog);
+      doneBtn?.addEventListener("click", closeDialog);
+
+      dialog?.addEventListener("click", (event) => {
+        if (event.target === dialog) closeDialog();
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && dialog?.open) closeDialog();
+      });
+
+      dialog?.addEventListener("close", () => {
+        const lang = html.dataset.lang || "en";
+        if (copyBtn && dictionary[lang]["contact.email.dialog.copy"]) {
+          copyBtn.textContent = dictionary[lang]["contact.email.dialog.copy"];
+        }
+      });
+
+      copyBtn?.addEventListener("click", async () => {
+        const lang = html.dataset.lang || "en";
+        try {
+          await navigator.clipboard.writeText(CONTACT_EMAIL);
+          if (dictionary[lang]["contact.email.dialog.copied"]) {
+            copyBtn.textContent = dictionary[lang]["contact.email.dialog.copied"];
+          }
+        } catch {
+          window.prompt(lang === "id" ? "Salin email ini:" : "Copy this email:", CONTACT_EMAIL);
+        }
+      });
+    }
+
+    initEmailDialog();
+
+    document.getElementById("contactForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const lang = html.dataset.lang;
+      const name = document.getElementById("name").value.trim() || (lang === "id" ? "Nama belum diisi" : "Name not filled");
+      const service = document.getElementById("service").value;
+      const message = document.getElementById("message").value.trim() || "-";
+
+      const text = lang === "id"
+        ? `Halo  AMFPHUB, saya ${name}. Saya tertarik dengan ${service}. Kebutuhan saya: ${message}`
+        : `Hi  AMFPHUB, I'm ${name}. I'm interested in ${service}. My need: ${message}`;
+
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`, "_blank");
+    });
+  </script>
+</body>
+</html>

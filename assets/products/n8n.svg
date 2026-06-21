@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#0b0c10"/>
+  <rect width="800" height="600" fill="url(#g)" opacity=".9"/>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#fe5a01" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#08090c" stop-opacity=".2"/>
+    </linearGradient>
+  </defs>
+  <circle cx="620" cy="120" r="180" fill="#fe5a01" fill-opacity=".12"/>
+  <circle cx="140" cy="480" r="140" fill="#fff" fill-opacity=".04"/>
+  <path d="M120 320 C220 180, 360 160, 480 240 C600 320, 680 280, 720 200" stroke="#fe5a01" stroke-width="3" stroke-dasharray="8 14" opacity=".7"/>
+  <path d="M160 380 C280 420, 420 360, 560 400 C640 420, 700 380, 740 340" stroke="#fff" stroke-width="2" stroke-dasharray="4 12" opacity=".25"/>
+  <rect x="180" y="210" width="440" height="220" rx="28" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.14)"/>
+  <text x="400" y="285" text-anchor="middle" fill="#fff" font-family="Inter,Segoe UI,sans-serif" font-size="72" font-weight="800" letter-spacing="-3">n8n</text>
+  <text x="400" y="345" text-anchor="middle" fill="rgba(255,255,255,.72)" font-family="Inter,Segoe UI,sans-serif" font-size="28" font-weight="500">Workflow Automation</text>
+</svg>
