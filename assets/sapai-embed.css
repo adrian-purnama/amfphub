@@ -1,0 +1,42 @@
+#sapai-embed-widget {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  z-index: 2147483000;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: min(312px, calc(100vw - 40px));
+  height: min(428px, calc(100dvh - 40px));
+  max-width: calc(100vw - 40px);
+  max-height: calc(100dvh - 40px);
+}
+
+#sapai-embed-widget.is-open {
+  display: block;
+}
+
+#sapai-embed-launcher {
+  display: inline-flex;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 2147483000;
+  width: 56px;
+  height: 56px;
+  border: 1px solid rgba(228, 228, 231, 0.9);
+  border-radius: 999px;
+  background: #18181b;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+#sapai-embed-launcher.is-hidden {
+  display: none;
+}
