@@ -97,16 +97,22 @@
     <div class="mega-footer" aria-hidden="true">AMFP<span class="mega-orange">HUB</span></div>
   </footer>
   <script src="../assets/product-page.js"></script>
-  <link rel="stylesheet" href="/assets/sapai-embed.css" />
+  <link rel="stylesheet" href="../assets/sapai-embed.css" />
   <iframe
     id="sapai-embed-widget"
+    data-embed-src="https://sapai.amfphub.com/embed/t/et_08f5f1b3b825e6a52e90061bd8d2f4f6bb148a2757500850?widget=1"
     src="https://sapai.amfphub.com/embed/t/et_08f5f1b3b825e6a52e90061bd8d2f4f6bb148a2757500850?widget=1"
     title="SapAi assistant"
     allow="clipboard-write"
   ></iframe>
-  <button type="button" id="sapai-embed-launcher" aria-label="Open assistant chat">
+  <button
+    type="button"
+    id="sapai-embed-launcher"
+    aria-label="Open assistant chat"
+    onclick="window.sapaiEmbedOpen?window.sapaiEmbedOpen():(function(l){var i=document.getElementById('sapai-embed-widget');if(!i)return;var s=i.getAttribute('data-embed-src')||i.src;window.__sapaiIgnoreCloseUntil=Date.now()+1500;i.classList.add('is-open');l.classList.add('is-hidden');if(s)i.src=s;})(this)"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/></svg>
   </button>
-  <script src="/assets/sapai-embed.js" defer></script>
+  <script src="../assets/sapai-embed.js"></script>
 </body>
 </html>
