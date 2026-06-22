@@ -1,5 +1,4 @@
 #sapai-embed-widget {
-  display: none;
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -12,10 +11,16 @@
   height: min(428px, calc(100dvh - 40px));
   max-width: calc(100vw - 40px);
   max-height: calc(100dvh - 40px);
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
 }
 
 #sapai-embed-widget.is-open {
-  display: block;
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
 }
 
 #sapai-embed-launcher {
