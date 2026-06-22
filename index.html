@@ -1219,6 +1219,8 @@
       font-weight: var(--fw-display);
       color: var(--black);
       text-transform: uppercase;
+      -webkit-text-stroke: clamp(10px, 0.045em, 3px) #fff;
+      paint-order: stroke fill;
     }
 
     .hero-minimal .hero-title {
@@ -1241,6 +1243,8 @@
 
     .minimal-title .accent {
       color: var(--orange);
+      -webkit-text-stroke: clamp(10px, 0.045em, 3px) transparent;
+      paint-order: stroke fill;
     }
 
     .minimal-title .split-word {
@@ -3119,7 +3123,7 @@
     id="sapai-embed-widget"
     src="https://sapai.amfphub.com/embed/t/et_08f5f1b3b825e6a52e90061bd8d2f4f6bb148a2757500850?widget=1"
     title="SapAi assistant"
-    style="position:fixed;bottom:20px;right:20px;border:0;border-radius:16px;background:transparent;z-index:2147483000;box-shadow:0 8px 32px rgba(0,0,0,0.2);width:min(312px,calc(100vw - 40px));height:min(428px,calc(100dvh - 40px));max-width:calc(100vw - 40px);max-height:calc(100dvh - 40px)"
+    style="display:none;position:fixed;bottom:20px;right:20px;border:0;border-radius:16px;background:transparent;z-index:2147483000;box-shadow:0 8px 32px rgba(0,0,0,0.2);width:min(312px,calc(100vw - 40px));height:min(428px,calc(100dvh - 40px));max-width:calc(100vw - 40px);max-height:calc(100dvh - 40px)"
     allow="clipboard-write"
   ></iframe>
   <script src="./assets/sapai-embed.js"></script>

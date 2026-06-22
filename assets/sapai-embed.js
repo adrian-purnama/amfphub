@@ -46,4 +46,6 @@
     if (d.action === "close") hideChat();
     if (d.action === "open") showChat();
   });
+
+  hideChat();
 })();
